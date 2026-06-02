@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Calculadora Tributária One — triagem fiscal por IRPF mínimo, Lei 15.270 e IBS/CBS." />
+    <meta name="theme-color" content="#f48120" />
+    <title>Calculadora Tributária One</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero">
+        <div class="hero-inner">
+          <div class="mark" aria-hidden="true">1</div>
+          <div>
+            <p class="eyebrow">Calculadora Tributária One</p>
+            <h1>Cada estrutura fiscal é única.</h1>
+            <p class="hero-lead">Simule IRPF mínimo, Lei 15.270 e IBS/CBS em minutos. Triagem clara — não é parecer.</p>
+          </div>
+        </div>
+      </header>
+
+      <main class="app-frame">
+        <nav class="tabs" aria-label="Módulos">
+          <button class="tab active" data-tab="dashboard" type="button">Início</button>
+          <button class="tab" data-tab="irpf" type="button">IRPF mínimo</button>
+          <button class="tab" data-tab="lei" type="button">Lei 15.270</button>
+          <button class="tab" data-tab="ibs" type="button">IBS / CBS / IS</button>
+          <button class="tab" data-tab="inicio" type="button">Como usar</button>
+          <button class="tab" data-tab="feedback" type="button">Feedback</button>
+        </nav>
+
+        <div class="panels-stage">
+          <section class="tab-panel" id="dashboardPanel">
+            <header class="section-head">
+              <div>
+                <p class="eyebrow">Bem-vindo</p>
+                <h2>Por onde começar</h2>
+              </div>
+            </header>
+            <p class="lead">Use os módulos abaixo para organizar cenário fiscal. Os resultados são estimativas de triagem — valide com contador antes de decidir.</p>
+            <div class="steps-grid">
+              <article>
+                <span class="step-num">1</span>
+                <h3>IRPF mínimo</h3>
+                <p>Totais da declaração, base, alíquota e complemento estimado.</p>
+              </article>
+              <article>
+                <span class="step-num">2</span>
+                <h3>Lei 15.270</h3>
+                <p>Dividendos e altas rendas, quando fizer sentido para o caso.</p>
+              </article>
+              <article>
+                <span class="step-num">3</span>
+                <h3>IBS / CBS / IS</h3>
+                <p>Cenário de transição, de forma paramétrica.</p>
+              </article>
+            </div>
+            <p style="margin-top: 16px">
+              <button class="btn-primary" id="goIrpf" type="button">Começar pelo IRPF mínimo</button>
+            </p>
+          </section>
+
+          <section class="tab-panel hidden" id="irpfPanel">
+            <header class="section-head">
+              <div>
+                <p class="eyebrow">Prioridade</p>
+                <h2>Imposto mínimo (IRPFM)</h2>
+              </div>
+              <span class="pill pill-warn">Estimativa</span>
+            </header>
+            <p class="lead">Base, alíquota mínima e complemento estimado a partir dos totais da declaração.</p>
+            <div class="workspace">
+              <form class="panel-form" id="irpfForm">
+                <div class="field-grid">
+                  <label>Rendimentos tributáveis<input name="taxableIncome" type="number" min="0" step="1000" value="420000" /></label>
+                  <label>Isentos incluídos na base<input name="includedExemptIncome" type="number" min="0" step="1000" value="360000" /></label>
+                  <label>Tributação exclusiva incluída<input name="includedExclusiveIncome" type="number" min="0" step="1000" value="80000" /></label>
+                  <label>Ganhos incluídos<input name="includedCapitalGains" type="number" min="0" step="1000" value="0" /></label>
+                  <label>Exclusões legais<input name="legalExclusions" type="number" min="0" step="1000" value="0" /></label>
+                  <label>IRPF devido no ajuste normal<input name="normalIrpfDue" type="number" min="0" step="1000" value="95000" /></label>
+                  <label>IRRF sobre dividendos<input name="dividendIrrf" type="number" min="0" step="1000" value="24000" /></label>
+                  <label>Outros créditos compensáveis<input name="otherCreditableTax" type="number" min="0" step="1000" value="12000" /></label>
+                </div>
+                <button class="btn-primary" type="submit">Calcular</button>
+              </form>
+              <aside class="panel-result result-card" id="irpfOutput" role="status">Preencha os campos e calcule.</aside>
+            </div>
+          </section>
+
+          <section class="tab-panel hidden" id="leiPanel">
+            <header class="section-head">
+              <div>
+                <p class="eyebrow">Lei 15.270/2025</p>
+                <h2>Dividendos e altas rendas</h2>
+              </div>
+              <span class="pill pill-warn">Estimativa</span>
+            </header>
+            <div class="workspace">
+              <form class="panel-form" id="leiForm">
+                <label>Dividendos mensais<input name="monthlyDividends" type="number" min="0" step="1000" value="75000" /></label>
+                <label>Renda anual estimada<input name="annualIncome" type="number" min="0" step="1000" value="720000" /></label>
+                <label class="check"><input name="nonResident" type="checkbox" /> Beneficiário não residente</label>
+                <label class="check"><input name="pre2025Approved" type="checkbox" /> Lucros até 2025 aprovados</label>
+                <button class="btn-primary" type="submit">Simular</button>
+              </form>
+              <aside class="panel-result result-card" id="leiOutput" role="status">Preencha e simule.</aside>
+            </div>
+          </section>
+
+          <section class="tab-panel hidden" id="ibsPanel">
+            <header class="section-head">
+              <div>
+                <p class="eyebrow">Transição 2026–2033</p>
+                <h2>IBS, CBS e IS</h2>
+              </div>
+              <span class="pill pill-muted">Paramétrico</span>
+            </header>
+            <div class="workspace">
+              <form class="panel-form" id="ibsForm">
+                <label>Receita mensal<input name="monthlyRevenue" type="number" min="0" step="1000" value="250000" /></label>
+                <label>Carga atual (%)<input name="currentRate" type="number" min="0" step="0.1" value="12" /></label>
+                <label>Alíquota futura estimada (%)<input name="futureRate" type="number" min="0" step="0.1" value="26.5" /></label>
+                <label>Aproveitamento de créditos (%)<input name="creditRate" type="number" min="0" max="100" step="1" value="55" /></label>
+                <button class="btn-primary" type="submit">Simular</button>
+              </form>
+              <aside class="panel-result result-card" id="ibsOutput" role="status">Preencha e simule.</aside>
+            </div>
+          </section>
+
+          <section class="tab-panel hidden" id="inicioPanel">
+            <header class="section-head">
+              <div>
+                <p class="eyebrow">Orientação</p>
+                <h2>Como usar</h2>
+              </div>
+            </header>
+            <div class="steps-grid">
+              <article>
+                <span class="step-num">1</span>
+                <h3>IRPF mínimo</h3>
+                <p>Preencha os totais da declaração. Pode usar valores fictícios para treinar.</p>
+              </article>
+              <article>
+                <span class="step-num">2</span>
+                <h3>Leia o resultado</h3>
+                <p>É estimativa de triagem — valide com contador antes de decidir.</p>
+              </article>
+              <article>
+                <span class="step-num">3</span>
+                <h3>Outros módulos</h3>
+                <p>Use Lei 15.270 ou IBS/CBS se o caso pedir outro cenário.</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="tab-panel hidden" id="feedbackPanel">
+            <header class="section-head">
+              <div>
+                <p class="eyebrow">Melhoria</p>
+                <h2>Enviar feedback</h2>
+              </div>
+            </header>
+            <div class="workspace workspace-single">
+              <form class="panel-form" id="feedbackForm">
+                <p class="fine-print">Sem CPF, senha ou dados identificáveis de cliente.</p>
+                <label>Tipo
+                  <select name="category">
+                    <option value="confusao">Ficou confuso</option>
+                    <option value="bug">Algo quebrou</option>
+                    <option value="melhoria">Melhoria prática</option>
+                    <option value="risco">Risco percebido</option>
+                  </select>
+                </label>
+                <label>O que aconteceu?<textarea name="message" maxlength="1200" rows="5" placeholder="Descreva em poucas linhas"></textarea></label>
+                <label>Impacto prático<textarea name="practicalImpact" maxlength="600" rows="3" placeholder="O que isso atrapalhou?"></textarea></label>
+                <button class="btn-primary" type="submit">Enviar</button>
+              </form>
+              <aside class="panel-result result-card" id="feedbackOutput" role="status">Seu retorno ajuda a melhorar a ferramenta.</aside>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <footer class="site-footer">
+        <p>Calculadora Tributária One — estimativas de triagem. Não substitui contador, advogado ou parecer formal.</p>
+      </footer>
+    </div>
+    <script src="/one-core.js"></script>
+    <script src="/one-ui.js"></script>
+  </body>
+</html>

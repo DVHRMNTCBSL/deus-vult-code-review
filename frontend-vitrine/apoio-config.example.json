@@ -1,0 +1,144 @@
+{
+  "version": 8,
+  "titulo": "Se quiser compartilhar ou apoiar",
+  "subtitulo": "Opcional — cartão ou boleto se fizer sentido · sem PIX na vitrine.",
+  "subobras": {
+    "habilitado": true,
+    "modo": "lp",
+    "titulo": "Preços",
+    "intro": "Grátis para testar. Pago quando quiser alguém do outro lado.",
+    "escada": ["Grátis", "Apoio", "Personalizado"],
+    "gratis": {
+      "habilitado": true,
+      "titulo": "Grátis",
+      "intro": "",
+      "pre_triagem": {
+        "habilitado": true,
+        "kicker": "",
+        "titulo": "Qual seu próximo passo?",
+        "intro": "3 perguntas · resposta na hora · não sai do navegador."
+      },
+      "itens": [
+        {
+          "id": "pre-triagem-dv",
+          "nome": "Próximo passo",
+          "descricao": "3 perguntas rápidas. Você sai sabendo o que fazer agora.",
+          "preco_brl": 0,
+          "cta_tipo": "inline",
+          "cta_label": "Começar"
+        },
+        {
+          "id": "encode-local",
+          "nome": "Dar forma",
+          "descricao": "Sua Obra #1 — escreve como vem, a IA organiza. Local, sem cadastro.",
+          "preco_brl": 0,
+          "cta_tipo": "anchor",
+          "cta_href": "#comece",
+          "cta_label": "Criar obra"
+        }
+      ]
+    },
+    "personalizado": {
+      "titulo": "Sob medida",
+      "intro": "Escopo combinado antes · feito para o seu caso."
+    },
+    "nota_precificacao": "",
+    "itens": [
+      {
+        "id": "triagem-pro",
+        "nome": "Triagem Pro",
+        "descricao": "Mapa do seu caos fiscal — o que é urgente e o que pode esperar.",
+        "prazo": "3–5 dias úteis",
+        "preco_brl": 47,
+        "preco_nota": "Digital · ~30 min de triagem",
+        "tag": "digital",
+        "status": "disponivel",
+        "mercadopago_link": ""
+      },
+      {
+        "id": "snapshot-dv",
+        "nome": "Snapshot DV",
+        "descricao": "Retrato do seu caos financeiro — gavetas, tensões e um próximo passo.",
+        "prazo": "5–7 dias úteis",
+        "preco_brl": 147,
+        "preco_nota": "~2 h · preço intro vitrine (calculado: R$ 197)",
+        "tag": "digital",
+        "status": "disponivel",
+        "mercadopago_link": ""
+      },
+      {
+        "id": "sessao-ponte",
+        "nome": "Sessão Ponte",
+        "descricao": "75 min ao vivo para destravar uma decisão — clareza, não consultoria.",
+        "prazo": "Agendamento em até 14 dias",
+        "preco_brl": 247,
+        "preco_nota": "~2,25 h total · humano",
+        "tag": "humano",
+        "status": "disponivel",
+        "mercadopago_link": ""
+      },
+      {
+        "id": "obra-sob-medida",
+        "nome": "Obra sob medida",
+        "descricao": "Ferramenta ou fluxo feito para o seu caso — calculadora, agente, vitrine.",
+        "prazo": "2–6 semanas",
+        "preco_brl": 497,
+        "preco_nota": "Mínimo 6 h · orçamento após escopo",
+        "tag": "obra",
+        "status": "sob_consulta",
+        "mercadopago_link": ""
+      }
+    ]
+  },
+  "loop_dv": {
+    "habilitado": true,
+    "titulo": "O Loop DV",
+    "intro": "O loop regula o território — coletoras guardam só o necessário; sensível vira redação antes de sync.",
+    "status_fallback": {
+      "zona": "calma",
+      "media": null,
+      "nota": "Leitura pública · sem tarefas internas."
+    },
+    "coletor": {
+      "registra": [
+        "Abas e simulações usadas (tipo de cálculo, não valores digitados)",
+        "Feedback limpo (bloqueado se tiver CPF, senha ou dado nominal)",
+        "ID anônimo do dispositivo (UUID local)",
+        "Evento coletor_redacted quando detalhe sensível foi filtrado"
+      ],
+      "nunca": [
+        "CPF, RG, cartão ou senha",
+        "Texto livre com e-mail ou telefone",
+        "Conteúdo de campos fiscais digitados",
+        "Rastreio fora do domínio DV"
+      ]
+    },
+    "gates": [
+      { "nome": "Cliente", "acao": "coletor-sanitize.js — filtra antes da fila local" },
+      { "nome": "Sync", "acao": "dv-coletor-sanitize.js — redige lote bilhete" },
+      { "nome": "Servidor", "acao": "feedback e exfil capture — rejeita sensível" },
+      { "nome": "Vitrine", "acao": "encode local — provas, não vazamento" }
+    ]
+  },
+  "mercadopago": {
+    "habilitado": false,
+    "nome_exibicao": "DEUS VULT",
+    "link_livre": "",
+    "links": [],
+    "formas_pagamento": {
+      "aceitas": ["cartao_credito", "boleto"],
+      "pix": false,
+      "aviso_visitante": "Aceitamos cartão de crédito e boleto. PIX não.",
+      "aviso_operador": "Use scripts/mp-preferencia-apoio.js para links sem PIX."
+    }
+  },
+  "crypto": {
+    "habilitado": false,
+    "nota": "Só endereço público (bc1…). NUNCA seed ou chave privada.",
+    "enderecos": []
+  },
+  "stripe": { "habilitado": false },
+  "produtos_futuros": [],
+  "nota_legal": "Apoio voluntário. Triagem fiscal não substitui contador habilitado.",
+  "nota_privacidade": "Sem PIX na vitrine · checkout em nome DEUS VULT."
+}

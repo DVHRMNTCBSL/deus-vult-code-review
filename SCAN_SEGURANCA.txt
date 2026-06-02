@@ -1,0 +1,6 @@
+﻿SCAN_SEGURANCA_PACOTE_MARCOS_EXPANDIDO
+status: SEM_SEGREDO_REAL_IDENTIFICADO
+observacao: matches esperados podem aparecer como nomes de gates defensivos, exemplos vazios ou texto de politica. Nao ha chave, token, senha ou segredo literal no pacote.
+
+matches:
+

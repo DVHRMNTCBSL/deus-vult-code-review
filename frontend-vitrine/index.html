@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DEUS VULT — clareza quando a cabeça não para</title>
+  <meta name="description" content="Sua primeira obra começa aqui. Pensar, sentir, reagir — forma no navegador, grátis, local, sem cadastro. Acessível por leitor de tela e teclado." />
+  <meta name="theme-color" content="#080705" />
+  <link rel="stylesheet" href="mente.css" />
+</head>
+<body data-season="organizacao" data-life-phase="crescimento">
+  <a class="skip" href="#comece">Pular para o agente</a>
+  <a class="skip" href="#sua-obra">Pular para sua obra</a>
+  <a class="skip" href="#precos">Pular para preços</a>
+
+  <header class="site-head" id="dvNav" role="banner">
+    <a class="mark" href="#top" aria-label="DEUS VULT — início da página">
+      <span class="mark-logo" aria-hidden="true">
+        <span class="mark-cube"></span>
+        <span class="mark-sphere"></span>
+      </span>
+      <span class="mark-name">DEUS VULT</span>
+    </a>
+    <nav class="site-nav" aria-label="Principal">
+      <a href="#comece">Começar</a>
+      <a href="#sua-obra">Sua obra</a>
+      <a href="#precos">Preços</a>
+      <a href="#apoio">Se quiser</a>
+      <a class="btn btn-nav" href="#comece">Experimentar</a>
+      <button type="button" class="btn btn-ghost btn-modo" id="btnModoVisual" aria-pressed="false">
+        Ativar modo visual
+      </button>
+    </nav>
+  </header>
+
+  <div id="sanctuaryLayer" aria-hidden="true"></div>
+  <div id="contatoDualLayer" aria-hidden="true"></div>
+  <div id="lifeDualVignette" aria-hidden="true"></div>
+  <div id="field" aria-hidden="true"></div>
+
+  <main class="front-externo" id="conteudo-principal" role="main" aria-label="DEUS VULT — sua obra">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <h1 class="hero-title reveal" id="hero-title">Sua primeira obra <span class="thunder-phrase">começa aqui</span>.</h1>
+      <p class="hero-lead reveal">
+        Pensar, sentir, reagir — para qualquer pessoa, em palavras simples.
+        Você escreve; sai obra. Grátis. Local. Sem cadastro. Sem linguagem fechada.
+      </p>
+      <div class="hero-actions reveal">
+        <a class="btn btn-primary btn-lg" href="#comece">Criar minha Obra número 1</a>
+      </div>
+      <p class="hero-trust fine reveal">Para visitantes. Privado no navegador. Não substitui contador nem advogado.</p>
+    </section>
+
+    <section class="block block-benefits" id="beneficios" aria-labelledby="beneficios-title">
+      <h2 class="sr-only" id="beneficios-title">Por que usar</h2>
+      <ul class="benefits reveal-stagger">
+        <li>
+          <span class="benefit-icon" aria-hidden="true">✎</span>
+          <strong>Sua voz</strong>
+          <span>Obra número 1 é o que você der forma — não um roteiro pronto.</span>
+        </li>
+        <li>
+          <span class="benefit-icon" aria-hidden="true">◇</span>
+          <strong>Privado</strong>
+          <span>Agente no seu navegador. Seu texto não vira produto.</span>
+        </li>
+        <li>
+          <span class="benefit-icon" aria-hidden="true">→</span>
+          <strong>Um passo</strong>
+          <span>Clareza prática — o que fazer agora.</span>
+        </li>
+      </ul>
+    </section>
+
+    <section class="block block-encode block-comece" id="comece" aria-labelledby="comece-title">
+      <p class="eyebrow reveal">Comece</p>
+      <h2 class="block-title reveal" id="comece-title">Dar forma ao que está na sua cabeça</h2>
+      <p class="block-lead reveal" id="comece-instrucoes">
+        Pode começar confuso — o importante é dar forma. Uma palavra, uma lista ou um fragmento bastam.
+        Dar forma ou Control+Enter. Grátis · local · sem cadastro. O que é fato e o que é hipótese ficam visíveis.
+      </p>
+      <div class="encode-workspace reveal">
+        <div class="encode-chaos">
+          <p class="encode-zone-label" id="encode-chaos-label">Entrada · o que você traz</p>
+          <div class="encode-visual" aria-hidden="true">
+            <span class="dv-badge" hidden>DV</span>
+            <span class="egg-badge" id="eggBadge" hidden>convite</span>
+            <canvas id="encodeCanvas" aria-hidden="true"></canvas>
+          </div>
+          <label for="rawInput">O que está na sua cabeça?</label>
+          <textarea
+            id="rawInput"
+            name="pensamento"
+            rows="5"
+            aria-describedby="comece-instrucoes encodeStatus encodeOutput"
+            placeholder="Exemplo: medo prova — ou uma palavra por linha: quero / não sei / ajuda"
+          ></textarea>
+          <div class="encode-actions">
+            <button type="button" class="btn btn-primary" id="btnEncode">Dar forma</button>
+            <button type="button" class="btn btn-ghost" id="btnRest">Limpar campo</button>
+          </div>
+        </div>
+        <div class="encode-document" aria-labelledby="encode-doc-label">
+          <p class="encode-zone-label" id="encode-doc-label">Saída · o que ganhou forma</p>
+          <p class="encode-status" id="encodeStatus" data-phase="idle" aria-live="polite">[ STATUS: AGUARDANDO ENTRADA ]</p>
+          <p class="sr-only" id="encodeStatusHint">Resultado do agente:</p>
+          <output
+            class="encode-output"
+            id="encodeOutput"
+            for="rawInput"
+            aria-live="polite"
+            aria-atomic="true"
+            aria-labelledby="encodeStatusHint encodeStatus"
+          >Escreva acima e pressione Dar forma. A resposta aparece aqui.</output>
+          <div class="encode-artifact-actions" id="encodeArtifactActions" hidden role="group" aria-label="Extrair artefato">
+            <button type="button" class="btn btn-ghost" id="btnExtractYaml">[ EXTRAIR ARTEFATO ] · Copiar YAML</button>
+            <button type="button" class="btn btn-ghost" id="btnDownloadTxt">[ EXTRAIR ARTEFATO ] · Baixar .txt</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block block-sua-obra" id="sua-obra" aria-labelledby="sua-obra-title">
+      <p class="eyebrow reveal">Obra número 1</p>
+      <h2 class="block-title reveal" id="sua-obra-title">O que você der forma</h2>
+      <p class="block-lead reveal">Fica no seu navegador até você copiar ou pedir algo sob medida.</p>
+      <div class="sua-obra-panel reveal" id="suaObraPanel" role="region" aria-live="polite" aria-labelledby="sua-obra-title">
+        <p class="sua-obra-empty">Vazia ainda. Dê forma no agente acima para nascer sua primeira obra.</p>
+      </div>
+      <div class="sua-obra-actions reveal">
+        <button type="button" class="btn btn-ghost" id="btnCopyObra" hidden aria-label="Copiar texto da sua obra para a área de transferência">[ EXTRAIR ARTEFATO ] · Copiar obra</button>
+        <a class="btn btn-ghost" href="#precos" id="btnObraSobMedida" hidden>Pedir ajuda humana</a>
+      </div>
+    </section>
+
+    <section class="block block-subobras" id="precos" aria-labelledby="precos-title">
+      <div id="subobrasRoot">
+        <p class="eyebrow reveal">Planos</p>
+        <h2 class="block-title subobras-title reveal" id="precos-title">Preços</h2>
+        <p class="block-lead subobras-intro reveal"></p>
+        <nav class="subobras-escada reveal" aria-label="Escada" hidden></nav>
+
+        <div class="subobras-zona subobras-zona-gratis">
+          <h3 class="subobras-zona-title reveal"></h3>
+          <p class="subobras-zona-intro fine reveal"></p>
+          <div class="subobras-grid subobras-grid-gratis reveal-stagger" role="list"></div>
+          <div id="preTriagemDv" class="pre-triagem reveal" hidden aria-live="polite"></div>
+        </div>
+
+        <div class="subobras-zona subobras-zona-paga">
+          <h3 class="subobras-zona-title reveal"></h3>
+          <p class="subobras-zona-intro fine reveal"></p>
+          <p class="subobras-nota fine reveal" hidden></p>
+          <div class="subobras-grid subobras-grid-pagas reveal-stagger" role="list"></div>
+        </div>
+
+        <p class="subobras-legal fine reveal">Grátis é local. Pago combina escopo antes. Sem promessa fiscal.</p>
+      </div>
+    </section>
+
+    <section class="block block-apoio apoio" id="apoio" aria-labelledby="apoio-title">
+      <div class="apoio-inner" id="apoioRoot">
+        <p class="eyebrow reveal">Se quiser</p>
+        <h2 class="block-title apoio-title reveal" id="apoio-title">Se quiser compartilhar ou apoiar</h2>
+        <p class="apoio-sub reveal"></p>
+        <div class="apoio-pay reveal">
+          <p class="apoio-pay-label">Doação</p>
+        </div>
+        <div class="apoio-sugestoes reveal" role="group" aria-label="Valores de doação"></div>
+        <div class="apoio-crypto reveal" hidden>
+          <p class="eyebrow">Bitcoin</p>
+          <p class="apoio-crypto-note"></p>
+          <div class="apoio-crypto-list"></div>
+        </div>
+        <p class="apoio-legal fine reveal"></p>
+        <p class="apoio-privacy fine reveal"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot" role="contentinfo">
+    <nav class="season-nav" id="seasonNav" aria-label="Estação e fase de vida do ciclo" hidden>
+      <span class="season-nav-kicker" aria-hidden="true">Roda</span>
+      <button type="button" class="season-dot" data-season="caos" aria-label="Inverno · nascimento"></button>
+      <button type="button" class="season-dot" data-season="organizacao" aria-label="Primavera · crescimento"></button>
+      <button type="button" class="season-dot" data-season="intensidade" aria-label="Verão · pico"></button>
+      <button type="button" class="season-dot" data-season="descanso" aria-label="Outono · colheita"></button>
+      <button type="button" class="season-dot" data-season="paz" aria-label="Ponte · repouso"></button>
+    </nav>
+    <p class="life-phase-label fine" id="lifePhaseLabel" aria-live="polite" hidden></p>
+    <p class="season-cycle-label fine" id="seasonCycleLabel" aria-live="polite" hidden></p>
+    <p class="contato-humano fine" id="contatoHumano">Se quiser contato humano: <a href="#apoio">#apoio</a> — sem pressa, sem venda.</p>
+    <p>Sua obra fica local no navegador. Acessível por teclado e leitor de tela.</p>
+    <p class="fine">Caminhos abertos — sem conflito de linguagem. Paz antes de pressa.</p>
+    <p><a href="#apoio">Se quiser compartilhar ou apoiar</a> · <a href="open-source/">Open source · revisar e contribuir</a></p>
+  </footer>
+
+  <script src="a11y-sem-luz.js"></script>
+  <script src="subobras.js"></script>
+  <script src="apoio.js"></script>
+  <script src="j10-dissert-core.js"></script>
+  <script src="mente.js"></script>
+</body>
+</html>

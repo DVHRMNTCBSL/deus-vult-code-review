@@ -1,0 +1,48 @@
+﻿{
+    "files":  40,
+    "bytes":  812178,
+    "text_files":  37,
+    "total_text_lines":  7034,
+    "extensions":  [
+                       {
+                           "extension":  ".js",
+                           "count":  11
+                       },
+                       {
+                           "extension":  ".py",
+                           "count":  5
+                       },
+                       {
+                           "extension":  ".xml",
+                           "count":  5
+                       },
+                       {
+                           "extension":  ".css",
+                           "count":  4
+                       },
+                       {
+                           "extension":  ".html",
+                           "count":  4
+                       },
+                       {
+                           "extension":  ".png",
+                           "count":  3
+                       },
+                       {
+                           "extension":  ".gradle",
+                           "count":  3
+                       },
+                       {
+                           "extension":  ".md",
+                           "count":  2
+                       },
+                       {
+                           "extension":  ".json",
+                           "count":  2
+                       },
+                       {
+                           "extension":  ".java",
+                           "count":  1
+                       }
+                   ]
+}

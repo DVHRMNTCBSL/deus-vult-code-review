@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Calculadora Tributaria One</title>
+    <!-- cto-offline-primary: dv-fiscal.test | revision-plane: 8786 -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="app-view" id="appView">
+        <header class="topbar">
+          <div class="brand-inline">
+            <div class="mark small">1</div>
+            <div>
+              <strong>Calculadora Tributaria One</strong>
+              <span>Offline — triagem</span>
+            </div>
+          </div>
+        </header>
+        <nav class="tabs">
+          <button class="tab active" data-tab="irpf" type="button">IRPF</button>
+          <button class="tab" data-tab="lei" type="button">Lei 15.270</button>
+          <button class="tab" data-tab="ibs" type="button">IBS/CBS</button>
+          <button class="tab" data-tab="feedback" type="button">Feedback</button>
+        </nav>
+        <section class="tab-panel" id="irpfPanel">
+          <h2>IRPF mínimo</h2>
+          <form class="tool" id="irpfForm">
+            <label>Rend. tributáveis <input name="taxableIncome" type="number" value="420000" /></label>
+            <label>Isentos na base <input name="includedExemptIncome" type="number" value="360000" /></label>
+            <label>Exclusiva incluída <input name="includedExclusiveIncome" type="number" value="80000" /></label>
+            <label>Ganhos <input name="includedCapitalGains" type="number" value="0" /></label>
+            <label>Exclusões <input name="legalExclusions" type="number" value="0" /></label>
+            <label>IRPF ajuste <input name="normalIrpfDue" type="number" value="95000" /></label>
+            <label>IRRF dividendos <input name="dividendIrrf" type="number" value="24000" /></label>
+            <label>Outros créditos <input name="otherCreditableTax" type="number" value="12000" /></label>
+            <button class="primary" type="submit">Calcular</button>
+          </form>
+          <pre class="output" id="irpfOutput"></pre>
+        </section>
+        <section class="tab-panel hidden" id="leiPanel">
+          <h2>Lei 15.270</h2>
+          <form class="tool" id="leiForm">
+            <label>Dividendos/mês <input name="monthlyDividends" type="number" value="75000" /></label>
+            <label>Renda anual <input name="annualIncome" type="number" value="720000" /></label>
+            <button class="primary" type="submit">Simular</button>
+          </form>
+          <pre class="output" id="leiOutput"></pre>
+        </section>
+        <section class="tab-panel hidden" id="ibsPanel">
+          <h2>IBS/CBS/IS</h2>
+          <form class="tool" id="ibsForm">
+            <label>Receita <input name="monthlyRevenue" type="number" value="250000" /></label>
+            <label>Carga atual % <input name="currentRate" type="number" value="12" /></label>
+            <label>Futura % <input name="futureRate" type="number" value="26.5" /></label>
+            <label>Créditos % <input name="creditRate" type="number" value="55" /></label>
+            <button class="primary" type="submit">Simular</button>
+          </form>
+          <pre class="output" id="ibsOutput"></pre>
+        </section>
+        <section class="tab-panel hidden" id="feedbackPanel">
+          <h2>Feedback</h2>
+          <form class="tool" id="feedbackForm">
+            <select name="category"><option value="melhoria">Melhoria</option></select>
+            <textarea name="message" rows="4"></textarea>
+            <textarea name="practicalImpact" rows="2"></textarea>
+            <button class="primary" type="submit">Enviar</button>
+          </form>
+          <pre class="output" id="feedbackOutput"></pre>
+        </section>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
