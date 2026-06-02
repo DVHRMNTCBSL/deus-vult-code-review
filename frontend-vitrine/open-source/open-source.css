@@ -360,6 +360,8 @@ main {
 }
 .os-axiomas h3,
 .os-classificacao h3,
+.os-source-card h3,
+.os-cursor-review h3,
 .os-open-policy h3,
 .os-repo-map h3,
 .os-gates h3 {
@@ -406,6 +408,91 @@ main {
 .chip-dec { background: rgba(232, 142, 142, 0.2); color: var(--dec); }
 
 .os-ref { margin-top: 1rem; }
+
+/* Source proof */
+.os-source-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+  margin: 2.5rem 0 1.5rem;
+}
+
+.os-source-card,
+.os-cursor-review {
+  border: 1px solid var(--panel-edge);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(176, 141, 87, 0.08), rgba(17, 16, 13, 0.64)),
+    rgba(17, 16, 13, 0.82);
+  padding: 1.35rem;
+}
+
+.os-source-card-main {
+  grid-column: span 2;
+}
+
+.os-source-label {
+  margin: 0 0 0.7rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--accent-warm);
+  letter-spacing: 0.12em;
+}
+
+.os-source-card h3,
+.os-cursor-review h3 {
+  color: var(--accent-warm);
+}
+
+.os-source-card p,
+.os-source-card li,
+.os-cursor-review p {
+  color: rgba(232, 240, 248, 0.84);
+  font-size: 0.9rem;
+}
+
+.os-source-card ul {
+  margin: 0;
+  padding-left: 1.15rem;
+}
+
+.os-source-card li {
+  margin-bottom: 0.45rem;
+}
+
+.os-source-card a {
+  color: var(--accent-warm);
+  overflow-wrap: anywhere;
+}
+
+.os-source-facts {
+  display: grid;
+  grid-template-columns: minmax(110px, 160px) 1fr;
+  gap: 0.55rem 1rem;
+  margin: 1rem 0 1.25rem;
+}
+
+.os-source-facts dt {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--accent);
+}
+
+.os-source-facts dd {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.os-cursor-review {
+  background: rgba(140, 160, 143, 0.08);
+  border-color: rgba(140, 160, 143, 0.2);
+}
+
+.os-cursor-review p {
+  margin: 0;
+  max-width: 76ch;
+}
 
 /* Homeostase triade */
 .os-triade {
@@ -787,6 +874,12 @@ main {
     border-top: 1px solid var(--panel-edge);
   }
   .os-triade {
+    grid-template-columns: 1fr;
+  }
+  .os-source-card-main {
+    grid-column: auto;
+  }
+  .os-source-facts {
     grid-template-columns: 1fr;
   }
   .os-triade-svg {

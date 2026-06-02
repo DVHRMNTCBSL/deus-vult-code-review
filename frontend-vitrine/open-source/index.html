@@ -20,6 +20,7 @@
       </span>
     </a>
     <nav class="os-nav" aria-label="Seções">
+      <a href="#codigo">Codigo</a>
       <a href="#linguagem">Linguagem</a>
       <a href="#homeostase">Homeostase</a>
       <a href="#caminhos">Caminhos</a>
@@ -45,8 +46,76 @@
         <span>Vontade → forma → método → obra com prova</span>
       </div>
       <div class="os-hero-actions">
+        <a class="btn btn-primary" href="https://github.com/DVHRMNTCBSL/deus-vult-code-review" target="_blank" rel="noopener">Ver codigo no GitHub</a>
         <a class="btn btn-primary" href="#linguagem">Começar pela linguagem estrutural</a>
         <a class="btn btn-ghost" href="#entrar">Contribuir no seu caminho</a>
+      </div>
+    </section>
+
+    <section class="os-block os-source-proof" id="codigo" aria-labelledby="codigo-title">
+      <div class="os-block-head">
+        <p class="os-eyebrow">Codigo publicado · revisao segura</p>
+        <h2 id="codigo-title">Source aberto para auditoria tecnica</h2>
+        <p class="os-block-lead">
+          O repositorio abaixo e um recorte publico e sanitizado para revisao:
+          codigo, estrutura, testes e manifestos. O objetivo e permitir que alguem
+          tecnico leia o que existe, rode o que for local e critique com evidencia,
+          sem expor conversas privadas, documentos, chaves ou dados pessoais.
+        </p>
+      </div>
+
+      <div class="os-source-grid">
+        <article class="os-source-card os-source-card-main">
+          <p class="os-source-label">PROVA</p>
+          <h3>Repositorio GitHub</h3>
+          <p>
+            <a href="https://github.com/DVHRMNTCBSL/deus-vult-code-review" target="_blank" rel="noopener">
+              github.com/DVHRMNTCBSL/deus-vult-code-review
+            </a>
+          </p>
+          <dl class="os-source-facts">
+            <dt>Commit publicado</dt>
+            <dd><code>fb6fcd0</code> · <span>Add Deus Vult code review package</span></dd>
+            <dt>Escopo</dt>
+            <dd>HTML, CSS, JavaScript, Python, Java Android, README, manifestos e testes locais.</dd>
+            <dt>Status</dt>
+            <dd>Aberto para revisao tecnica. Dados sensiveis ficaram fora do pacote.</dd>
+          </dl>
+          <a class="btn btn-primary" href="https://github.com/DVHRMNTCBSL/deus-vult-code-review" target="_blank" rel="noopener">Abrir source</a>
+        </article>
+
+        <article class="os-source-card">
+          <p class="os-source-label">DECISAO</p>
+          <h3>O que pedir para revisar</h3>
+          <ul>
+            <li>Se o README explica o projeto sem depender de linguagem privada.</li>
+            <li>Se o manifesto separa codigo real de tese, hipotese e metafora.</li>
+            <li>Se os testes Python passam localmente e fazem sentido.</li>
+            <li>Se a vitrine HTML/CSS/JS e clara, acessivel e sem coleta indevida.</li>
+            <li>Se o Android e o frontend mostram arquitetura simples o bastante.</li>
+          </ul>
+        </article>
+
+        <article class="os-source-card">
+          <p class="os-source-label">GATE</p>
+          <h3>O que ficou fora</h3>
+          <ul>
+            <li>Canais privados, contatos, documentos e identificadores pessoais.</li>
+            <li>Credenciais, chaves privadas, seeds e arquivos <code>.env</code>.</li>
+            <li>Informacoes patrimoniais, de saude, fiscais pessoais e historico privado do vault.</li>
+            <li>Logs sensiveis, anexos pessoais e qualquer dump de massa.</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="os-cursor-review">
+        <h3>Pedido ao Cursor ou revisor tecnico</h3>
+        <p>
+          Revise o repositorio publico como code review: encontre bugs, riscos,
+          excesso de abstracao, falta de teste e pontos onde a explicacao ainda
+          nao vira codigo. Nao solicite nem publique dados sensiveis. Se algo
+          parecer privado, trate como bloqueio e proponha um patch menor.
+        </p>
       </div>
     </section>
 
@@ -292,7 +361,7 @@
             <span class="os-flow-num">3</span>
             <div>
               <strong>Track record</strong>
-              <p>Eventos locais ou fila até sync — só no território DV, sem CPF/senha/token.</p>
+              <p>Eventos locais ou fila até sync — só no território DV, sem credenciais ou identificadores pessoais.</p>
             </div>
           </li>
           <li>
@@ -390,8 +459,8 @@
           <div>
             <p class="os-gates-label">Nunca commitar</p>
             <ul>
-              <li>Tokens, API keys, senhas, seeds</li>
-              <li>CPF, extratos, registros médicos</li>
+              <li>Credenciais, chaves privadas e seeds</li>
+              <li>Identidade, extratos e registros de saude</li>
               <li><code>.env</code> com valores reais</li>
             </ul>
           </div>
@@ -423,9 +492,9 @@
           <strong>Calculadora Obra #1</strong>
           <span>Triagem fiscal · não é parecer</span>
         </a>
-        <a class="os-link-card" href="../interno.html">
-          <strong>Convite interno</strong>
-          <span>Loop · retro · coletoras</span>
+        <a class="os-link-card" href="https://github.com/DVHRMNTCBSL/deus-vult-code-review" target="_blank" rel="noopener">
+          <strong>Repositorio source</strong>
+          <span>Codigo publico para revisao tecnica</span>
         </a>
       </div>
     </section>
