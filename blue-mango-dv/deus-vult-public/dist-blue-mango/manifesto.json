@@ -1,0 +1,12 @@
+{
+  "name": "BLUE MANGO",
+  "status": "public_static_build",
+  "generatedAt": "2026-06-05T19:11:55.173Z",
+  "files": [
+    "index.html",
+    "blue-mango-model.js",
+    "CNAME"
+  ],
+  "source": "deus-vult-public/scripts/build-blue-mango.js",
+  "gate": "upload_deploy_push_authorized_by_controller_latest_message"
+}

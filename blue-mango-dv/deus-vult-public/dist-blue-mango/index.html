@@ -1,0 +1,2522 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>BLUE MANGO</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #121512;
+      --panel: #242923;
+      --panel-2: #1b211b;
+      --line: #3a4438;
+      --text: #f4f7ef;
+      --muted: #b8c4b1;
+      --light: #ebecd0;
+      --dark: #739552;
+      --select: #f6c85f;
+      --hint: rgba(20, 28, 20, 0.34);
+      --blue: #1f7ae0;
+      --danger: #ef6b5b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      overflow-x: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button,
+    select,
+    input {
+      font: inherit;
+    }
+
+    .app {
+      min-height: 100svh;
+      width: 100%;
+      max-width: 100vw;
+      display: grid;
+      grid-template-columns: 232px minmax(360px, 1fr) 332px;
+      gap: 18px;
+      padding: 18px;
+    }
+
+    .rail,
+    .side {
+      background: linear-gradient(180deg, rgba(36, 41, 35, 0.98), rgba(27, 33, 27, 0.98));
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      height: calc(100svh - 36px);
+      min-height: 0;
+      overflow: auto;
+    }
+
+    .rail {
+      display: flex;
+      flex-direction: column;
+      padding: 18px;
+      gap: 14px;
+    }
+
+    .brand {
+      margin: 0 0 8px;
+      font-size: 30px;
+      line-height: 0.95;
+      letter-spacing: 0;
+      font-weight: 850;
+    }
+
+    .mango-mark {
+      width: 54px;
+      aspect-ratio: 1;
+      border-radius: 45% 55% 48% 52%;
+      background:
+        radial-gradient(circle at 62% 58%, #f6c85f 0 22%, transparent 23%),
+        radial-gradient(circle at 38% 36%, #3e93ff 0 46%, #1f7ae0 47% 72%, #1352a8 73%);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.38);
+      position: relative;
+    }
+
+    .mango-mark::before {
+      content: "";
+      position: absolute;
+      width: 28px;
+      height: 10px;
+      left: 24px;
+      top: -4px;
+      border-radius: 50%;
+      background: #56c979;
+      transform: rotate(-24deg);
+    }
+
+    .rail-group {
+      display: grid;
+      gap: 8px;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    select,
+    input {
+      width: 100%;
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #171d17;
+      color: var(--text);
+      padding: 0 10px;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #30392e;
+      color: var(--text);
+      cursor: pointer;
+      font-weight: 750;
+    }
+
+    button:hover {
+      border-color: #5d6c58;
+      background: #394334;
+    }
+
+    button.primary {
+      background: #7fa650;
+      color: #10160d;
+      border-color: #8fb863;
+    }
+
+    button.blue {
+      background: var(--blue);
+      border-color: #3d8df0;
+    }
+
+    .board-shell {
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 10px;
+      min-height: calc(100svh - 36px);
+    }
+
+    .play-hud {
+      width: min(calc(100svh - 126px), calc(100vw - 620px));
+      min-width: 360px;
+      max-width: 820px;
+      display: grid;
+      grid-template-columns: 0.95fr 1.35fr 0.75fr 0.85fr;
+      gap: 8px;
+      padding: 10px 12px;
+      background: rgba(21, 27, 21, 0.92);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 16px 42px rgba(0, 0, 0, 0.24);
+    }
+
+    .hud-item {
+      display: grid;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .hud-label {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
+
+    .hud-value {
+      color: #f4ead2;
+      font-size: 13px;
+      font-weight: 850;
+      line-height: 1.25;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .board-wrap {
+      width: min(calc(100svh - 126px), calc(100vw - 620px));
+      min-width: 360px;
+      max-width: 820px;
+      aspect-ratio: 1;
+      position: relative;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+    }
+
+    .board {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(8, 1fr);
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      user-select: none;
+    }
+
+    .sq {
+      position: relative;
+      display: grid;
+      place-items: center;
+      color: #1b1b1b;
+      cursor: pointer;
+    }
+
+    .sq.light {
+      background: var(--light);
+    }
+
+    .sq.dark {
+      background: var(--dark);
+    }
+
+    .sq.selected {
+      box-shadow: inset 0 0 0 5px rgba(246, 200, 95, 0.95);
+    }
+
+    .sq.last {
+      box-shadow: inset 0 0 0 999px rgba(246, 200, 95, 0.26);
+    }
+
+    .sq.hint::after {
+      content: "";
+      width: 28%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: var(--hint);
+    }
+
+    .sq.capture::after {
+      content: "";
+      position: absolute;
+      inset: 10%;
+      border: 5px solid rgba(20, 28, 20, 0.28);
+      border-radius: 50%;
+    }
+
+    .piece {
+      font-family: "Segoe UI Symbol", "Noto Sans Symbols", serif;
+      font-size: 62px;
+      line-height: 1;
+      filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.18));
+      z-index: 1;
+    }
+
+    .piece.white {
+      color: #d9c68f;
+      -webkit-text-stroke: 1.1px #20251d;
+      text-shadow:
+        0 1px 0 rgba(255, 248, 220, 0.5),
+        0 2px 4px rgba(20, 18, 12, 0.28);
+    }
+
+    .piece.black {
+      color: #20251d;
+    }
+
+    body[data-piece-theme="contrast"] .piece.white {
+      color: #fff2b3;
+      -webkit-text-stroke: 1.45px #070907;
+      text-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.58),
+        0 3px 5px rgba(0, 0, 0, 0.46);
+    }
+
+    body[data-piece-theme="contrast"] .piece.black {
+      color: #070907;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.16);
+    }
+
+    body[data-piece-theme="classic"] .piece.white {
+      color: #f5f1df;
+      -webkit-text-stroke: 0.85px #20251d;
+      text-shadow: 0 2px 3px rgba(0, 0, 0, 0.28);
+    }
+
+    body[data-piece-theme="classic"] .piece.black {
+      color: #191d17;
+    }
+
+    .coord {
+      position: absolute;
+      font-size: 11px;
+      font-weight: 800;
+      opacity: 0.62;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .rank {
+      left: 5px;
+      top: 3px;
+    }
+
+    .file {
+      right: 5px;
+      bottom: 3px;
+    }
+
+    .side {
+      padding: 16px;
+      display: grid;
+      grid-template-rows: auto auto auto auto auto minmax(130px, 1fr) auto;
+      gap: 12px;
+    }
+
+    .status {
+      display: grid;
+      gap: 8px;
+      padding: 12px;
+      background: #171d17;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .turn {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .fen {
+      font-family: Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      line-height: 1.35;
+      color: var(--muted);
+      overflow-wrap: anywhere;
+    }
+
+    .model-line {
+      min-height: 20px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .clock-panel,
+    .focus-panel,
+    .solver-panel,
+    .report {
+      display: grid;
+      gap: 8px;
+      padding: 12px;
+      background: #151b15;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .clock-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .focus-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .clock,
+    .focus-card {
+      display: grid;
+      gap: 2px;
+      padding: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      background: #10160f;
+    }
+
+    .clock.active {
+      border-color: #f6c85f;
+      box-shadow: inset 0 0 0 1px rgba(246, 200, 95, 0.35);
+    }
+
+    .clock-label,
+    .focus-label,
+    .report-title {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .clock-time {
+      font-family: Consolas, "Liberation Mono", monospace;
+      font-size: 21px;
+      font-weight: 850;
+    }
+
+    .focus-value {
+      color: #f4ead2;
+      font-size: 12px;
+      font-weight: 750;
+      line-height: 1.35;
+    }
+
+    .clock-time.low {
+      color: var(--danger);
+    }
+
+    .score-line {
+      color: #f4ead2;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .report-text {
+      color: #dfe8d7;
+      font-size: 12px;
+      line-height: 1.45;
+      white-space: pre-line;
+    }
+
+    .coach {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      background: #151b15;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .coach-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .coach-mango {
+      width: 38px;
+      aspect-ratio: 1;
+      border-radius: 45% 55% 48% 52%;
+      background:
+        radial-gradient(circle at 62% 58%, #f2bd4d 0 20%, transparent 21%),
+        radial-gradient(circle at 38% 36%, #4f9fff 0 44%, #1f7ae0 45% 74%, #174f9a 75%);
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .coach-mango::before {
+      content: "";
+      position: absolute;
+      width: 21px;
+      height: 8px;
+      left: 18px;
+      top: -3px;
+      border-radius: 50%;
+      background: #62d27a;
+      transform: rotate(-24deg);
+    }
+
+    .coach-mango::after {
+      content: "";
+      position: absolute;
+      inset: 13px 9px 9px;
+      border-bottom: 2px solid rgba(16, 22, 13, 0.72);
+      border-radius: 50%;
+    }
+
+    .coach-title {
+      font-weight: 850;
+    }
+
+    .coach-subtitle {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .coach-text {
+      display: grid;
+      gap: 6px;
+      color: #dfe8d7;
+      font-size: 13px;
+      line-height: 1.45;
+      white-space: pre-line;
+    }
+
+    .coach-text p {
+      margin: 0;
+    }
+
+    .coach-text strong {
+      color: #f4ead2;
+    }
+
+    .moves {
+      background: #171d17;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: auto;
+      padding: 10px;
+    }
+
+    .move-row {
+      display: grid;
+      grid-template-columns: 34px 1fr 1fr;
+      gap: 8px;
+      min-height: 28px;
+      align-items: center;
+      color: var(--muted);
+      font-family: Consolas, "Liberation Mono", monospace;
+      font-size: 13px;
+    }
+
+    .move-row span:not(:first-child) {
+      color: var(--text);
+    }
+
+    .bridge {
+      display: grid;
+      gap: 8px;
+    }
+
+    details.bridge summary {
+      list-style: none;
+      min-height: 38px;
+      display: grid;
+      align-items: center;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #30392e;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    details.bridge summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.bridge[open] summary {
+      border-color: #5d6c58;
+      background: #394334;
+    }
+
+    details.solver-panel summary {
+      list-style: none;
+      cursor: pointer;
+      color: #f4ead2;
+      font-weight: 850;
+    }
+
+    details.solver-panel summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .solver-text {
+      display: grid;
+      gap: 7px;
+      color: #dfe8d7;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .solver-text p {
+      margin: 0;
+    }
+
+    .solver-text a {
+      color: #8fc2ff;
+      overflow-wrap: anywhere;
+    }
+
+    .solver-actions {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 8px;
+    }
+
+    .solver-result {
+      min-height: 18px;
+      color: #dfe8d7;
+      font-size: 12px;
+      line-height: 1.45;
+      white-space: pre-line;
+    }
+
+    .bridge-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .note {
+      min-height: 18px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .note.bad {
+      color: var(--danger);
+    }
+
+    .mobile-dock {
+      display: none;
+    }
+
+    @media (max-width: 1080px) {
+      .app {
+        grid-template-columns: 1fr;
+        padding: 12px;
+      }
+
+      .rail,
+      .side {
+        height: auto;
+        max-height: none;
+        min-height: 0;
+        overflow: visible;
+      }
+
+      .rail {
+        display: grid;
+        grid-template-columns: auto 1fr 1fr;
+        align-items: end;
+      }
+
+      .board-wrap {
+        width: min(94vw, 760px);
+        min-width: 0;
+      }
+
+      .play-hud {
+        width: min(94vw, 760px);
+        min-width: 0;
+      }
+    }
+
+    @media (max-width: 720px) {
+      html,
+      body {
+        width: 100%;
+      }
+
+      .app {
+        width: 100%;
+        max-width: none;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+          "board"
+          "rail"
+          "side";
+        gap: 8px;
+        margin: 0;
+        padding: max(8px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right)) calc(82px + env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
+        overflow-x: hidden;
+      }
+
+      .app > *,
+      .rail > *,
+      .side > * {
+        min-width: 0;
+      }
+
+      .rail {
+        grid-area: rail;
+        width: 100%;
+        max-width: 100%;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 8px;
+        padding: 10px;
+        overflow: hidden;
+      }
+
+      .brand-row {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .mode-group {
+        grid-column: 1 / -1;
+      }
+
+      .mango-mark {
+        width: 42px;
+      }
+
+      .brand {
+        margin: 0;
+        font-size: 25px;
+        line-height: 0.92;
+      }
+
+      .rail-group {
+        gap: 4px;
+      }
+
+      .label {
+        display: none;
+      }
+
+      select,
+      input,
+      button {
+        width: 100%;
+        min-width: 0;
+        min-height: 34px;
+        padding: 0 8px;
+        font-size: 13px;
+        white-space: normal;
+        overflow-wrap: anywhere;
+      }
+
+      .board-shell {
+        grid-area: board;
+        min-height: auto;
+        width: 100%;
+        min-width: 0;
+        display: block;
+        overflow: visible;
+      }
+
+      .board-wrap {
+        width: 100%;
+        min-width: 0;
+        max-width: min(100%, 440px);
+        margin: 0 auto;
+        overflow: hidden;
+      }
+
+      .play-hud {
+        width: 100%;
+        min-width: 0;
+        max-width: min(100%, 440px);
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        padding: 9px 10px;
+      }
+
+      .hud-item.coach-hud {
+        grid-column: 1 / -1;
+      }
+
+      .hud-value {
+        font-size: 12px;
+        line-height: 1.25;
+      }
+
+      .side {
+        grid-area: side;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        padding: 10px;
+        gap: 8px;
+      }
+
+      .piece {
+        font-size: 34px;
+      }
+
+      .moves {
+        min-height: 112px;
+        max-height: 160px;
+      }
+
+      .clock-panel,
+      .focus-panel,
+      .solver-panel,
+      .report {
+        padding: 10px;
+      }
+
+      .focus-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      select,
+      input,
+      button,
+      details.bridge summary {
+        min-height: 42px;
+      }
+
+      #aiMove {
+        grid-column: 1 / -1;
+      }
+
+      .mobile-dock {
+        position: fixed;
+        left: max(8px, env(safe-area-inset-left));
+        right: max(8px, env(safe-area-inset-right));
+        bottom: max(8px, env(safe-area-inset-bottom));
+        z-index: 20;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+        padding: 8px;
+        background: rgba(18, 21, 18, 0.94);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        box-shadow: 0 16px 42px rgba(0, 0, 0, 0.42);
+        backdrop-filter: blur(12px);
+      }
+
+      .mobile-dock button {
+        min-height: 46px;
+        padding: 0 4px;
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .rail,
+      .bridge-actions {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .board-wrap {
+        max-width: calc(100vw - 16px);
+      }
+
+      .piece {
+        font-size: 31px;
+      }
+
+      .play-hud {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .mobile-dock {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="rail">
+      <div class="brand-row">
+        <div class="mango-mark" aria-hidden="true"></div>
+        <h1 class="brand">BLUE MANGO</h1>
+      </div>
+      <div class="rail-group mode-group">
+        <label class="label" for="mode">Modo</label>
+        <select id="mode">
+          <option value="ai">Vs persona</option>
+          <option value="human">Humano vs humano</option>
+        </select>
+      </div>
+      <div class="rail-group">
+        <label class="label" for="persona">Persona</label>
+        <select id="persona">
+          <option value="pai_bullet" selected>Mango Bullet Pai</option>
+          <option value="calmo">Professor Calmo</option>
+          <option value="tatico">Atacante Tatico</option>
+          <option value="solido">Defensor Solido</option>
+          <option value="carlsen">Carlsen Tecnico</option>
+          <option value="kasparov">Kasparov Pressao</option>
+          <option value="karpov">Karpov Controle</option>
+          <option value="stockfish">Stockfish Mentor</option>
+        </select>
+      </div>
+      <div class="rail-group">
+        <label class="label" for="side">Lado humano</label>
+        <select id="side">
+          <option value="w">Brancas</option>
+          <option value="b">Pretas</option>
+        </select>
+      </div>
+      <div class="rail-group">
+        <label class="label" for="depth">Forca / motor</label>
+        <select id="depth">
+          <option value="persona" selected>Automatica</option>
+          <option value="1">Rapida</option>
+          <option value="2">Firme</option>
+          <option value="3">Pesada</option>
+          <option value="4">Forte local</option>
+          <option value="stockfish">Stockfish online</option>
+        </select>
+      </div>
+      <div class="rail-group">
+        <label class="label" for="coachMode">Treinador</label>
+        <select id="coachMode">
+          <option value="family" selected>Familia</option>
+          <option value="fast">Rapido</option>
+          <option value="tactic">Tatico</option>
+        </select>
+      </div>
+      <div class="rail-group">
+        <label class="label" for="pieceTheme">Pecas</label>
+        <select id="pieceTheme">
+          <option value="comfort" selected>Conforto</option>
+          <option value="contrast">Alto contraste</option>
+          <option value="classic">Classico</option>
+        </select>
+      </div>
+      <div class="rail-group">
+        <label class="label" for="timeControl">Tempo</label>
+        <select id="timeControl">
+          <option value="0">Sem relogio</option>
+          <option value="30">30s treino</option>
+          <option value="60">1 min</option>
+          <option value="180">3 min</option>
+          <option value="300" selected>5 min</option>
+          <option value="600">10 min</option>
+        </select>
+      </div>
+      <button class="primary" id="newGame">Nova partida</button>
+      <button id="flip">Virar tabuleiro</button>
+      <button class="blue" id="aiMove">Lance BLUE MANGO</button>
+    </aside>
+
+    <main class="board-shell">
+      <section class="play-hud" aria-live="polite">
+        <div class="hud-item">
+          <div class="hud-label">Vez</div>
+          <div class="hud-value" id="hudTurn">Brancas</div>
+        </div>
+        <div class="hud-item coach-hud">
+          <div class="hud-label">Mango agora</div>
+          <div class="hud-value" id="hudCoach">Centro, peca, rei.</div>
+        </div>
+        <div class="hud-item">
+          <div class="hud-label">Tempo</div>
+          <div class="hud-value" id="hudClock">05:00 | 05:00</div>
+        </div>
+        <div class="hud-item">
+          <div class="hud-label">Nota</div>
+          <div class="hud-value" id="hudScore">Sem nota</div>
+        </div>
+      </section>
+      <section class="board-wrap" aria-label="BLUE MANGO">
+        <div class="board" id="board"></div>
+      </section>
+    </main>
+
+    <aside class="side">
+      <section class="status" aria-live="polite">
+        <div class="turn" id="turn"></div>
+        <div class="model-line" id="modelLine"></div>
+        <div class="fen" id="fen"></div>
+      </section>
+      <section class="clock-panel" aria-live="polite">
+        <div class="clock-grid">
+          <div class="clock" id="clockWhiteBox">
+            <div class="clock-label">Brancas</div>
+            <div class="clock-time" id="clockWhite">05:00</div>
+          </div>
+          <div class="clock" id="clockBlackBox">
+            <div class="clock-label">Pretas</div>
+            <div class="clock-time" id="clockBlack">05:00</div>
+          </div>
+        </div>
+      </section>
+      <section class="focus-panel" aria-live="polite">
+        <div class="focus-grid">
+          <div class="focus-card">
+            <div class="focus-label">Agora</div>
+            <div class="focus-value" id="focusNow">Centro</div>
+          </div>
+          <div class="focus-card">
+            <div class="focus-label">Risco</div>
+            <div class="focus-value" id="focusRisk">Rei</div>
+          </div>
+          <div class="focus-card">
+            <div class="focus-label">Ritmo</div>
+            <div class="focus-value" id="focusTempo">Calmo</div>
+          </div>
+        </div>
+      </section>
+      <details class="solver-panel">
+        <summary>Resolver DV</summary>
+        <div class="solver-text">
+          <p><strong>PROOF:</strong> em jogo finito de informacao perfeita, existe valor otimo teorico.</p>
+          <p><strong>IMPASSE:</strong> a posicao inicial do xadrez ainda nao tem certificado publico completo de vitoria/empate/derrota.</p>
+          <p><strong>PARCIAL:</strong> finais com poucas pecas sao resolvidos por tablebases; BLUE MANGO usa busca local e Stockfish opcional como politica auditavel.</p>
+          <p><strong>PROXIMO:</strong> ampliar prova por camada: tablebase, proof-number search, transposition table e certificado por FEN.</p>
+          <div class="solver-actions">
+            <button id="tablebaseDemoBtn" type="button">Carregar final exemplo</button>
+            <button id="resolverBtn" type="button">Resolver posicao DV</button>
+            <button id="tablebaseBtn" type="button">Provar final por tablebase</button>
+            <div class="solver-result" id="tablebaseResult">Disponivel para posicoes com ate 7 pecas.</div>
+          </div>
+          <p><a href="https://www.chessprogramming.org/Alpha-Beta" target="_blank" rel="noreferrer">Alpha-beta</a> · <a href="https://www.chessprogramming.org/Quiescence_Search" target="_blank" rel="noreferrer">Quiescence</a> · <a href="https://github.com/lichess-org/lila-tablebase" target="_blank" rel="noreferrer">Tablebase</a></p>
+        </div>
+      </details>
+      <section class="coach" aria-live="polite">
+        <div class="coach-head">
+          <div class="coach-mango" aria-hidden="true"></div>
+          <div>
+            <div class="coach-title">Mango Coach</div>
+            <div class="coach-subtitle">Olhe, entenda e jogue melhor</div>
+          </div>
+        </div>
+        <div class="coach-text" id="coachText"></div>
+      </section>
+      <details class="bridge">
+        <summary>Treino tecnico</summary>
+        <input id="uci" autocomplete="off" spellcheck="false" placeholder="e2e4">
+        <div class="bridge-actions">
+          <button id="applyUci">Testar lance</button>
+          <button id="copyFen">Copiar FEN</button>
+        </div>
+      </details>
+      <div class="note" id="note"></div>
+      <section class="report" aria-live="polite">
+        <div class="report-title">Relatorio da partida</div>
+        <div class="score-line" id="scoreLine">Pontuacao: aguardando lances.</div>
+        <div class="report-text" id="reportText">Jogue uma partida para o Mango apontar o que melhorou e o que ajustar.</div>
+      </section>
+      <section class="moves" id="moves"></section>
+      <button id="undo">Voltar lance</button>
+    </aside>
+  </div>
+  <nav class="mobile-dock" aria-label="Acoes rapidas">
+    <button id="dockNew" type="button">Novo</button>
+    <button id="dockHint" type="button">Dica</button>
+    <button id="dockAi" type="button">Mango</button>
+    <button id="dockUndo" type="button">Voltar</button>
+  </nav>
+
+  <script src="./blue-mango-model.js"></script>
+  <script>
+    (() => {
+      "use strict";
+
+      const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+      const INF = 1000000000;
+      const MATE = 1000000;
+      const value = { p: 100, n: 320, b: 330, r: 500, q: 900, k: 0 };
+      const pst = {
+        p: [
+           0,  0,  0,  0,  0,  0,  0,  0,
+          55, 55, 55, 55, 55, 55, 55, 55,
+          18, 18, 26, 34, 34, 26, 18, 18,
+           8,  8, 16, 28, 28, 16,  8,  8,
+           3,  3, 10, 22, 22, 10,  3,  3,
+           4, -4,-10,  0,  0,-10, -4,  4,
+           4,  8,  8,-18,-18,  8,  8,  4,
+           0,  0,  0,  0,  0,  0,  0,  0
+        ],
+        n: [
+         -55,-35,-25,-25,-25,-25,-35,-55,
+         -35,-15,  5,  8,  8,  5,-15,-35,
+         -25,  8, 18, 24, 24, 18,  8,-25,
+         -20,  8, 24, 32, 32, 24,  8,-20,
+         -20,  8, 24, 32, 32, 24,  8,-20,
+         -25,  4, 18, 24, 24, 18,  4,-25,
+         -35,-15,  0,  8,  8,  0,-15,-35,
+         -55,-35,-25,-25,-25,-25,-35,-55
+        ],
+        b: [
+         -25,-10,-10,-10,-10,-10,-10,-25,
+         -10,  8,  4,  4,  4,  4,  8,-10,
+         -10, 12, 12, 16, 16, 12, 12,-10,
+         -10,  4, 18, 20, 20, 18,  4,-10,
+         -10, 10, 16, 20, 20, 16, 10,-10,
+         -10, 16, 12, 14, 14, 12, 16,-10,
+         -10,  8,  8,  2,  2,  8,  8,-10,
+         -25,-10,-10,-10,-10,-10,-10,-25
+        ],
+        r: [
+           0,  0,  6, 12, 12,  6,  0,  0,
+           6, 12, 12, 18, 18, 12, 12,  6,
+          -4,  0,  4,  8,  8,  4,  0, -4,
+          -4,  0,  4,  8,  8,  4,  0, -4,
+          -4,  0,  4,  8,  8,  4,  0, -4,
+          -4,  0,  4,  8,  8,  4,  0, -4,
+          -4,  0,  4,  8,  8,  4,  0, -4,
+           0,  0,  6, 12, 12,  6,  0,  0
+        ],
+        q: [
+         -18,-10,-10, -4, -4,-10,-10,-18,
+         -10,  2,  8,  4,  4,  8,  2,-10,
+         -10,  8, 10, 12, 12, 10,  8,-10,
+          -4,  4, 12, 14, 14, 12,  4, -4,
+           0,  4, 12, 14, 14, 12,  4, -4,
+         -10,  8, 10, 12, 12, 10,  8,-10,
+         -10,  2,  8,  4,  4,  8,  2,-10,
+         -18,-10,-10, -4, -4,-10,-10,-18
+        ],
+        k: [
+          18, 28, 12,  0,  0, 12, 28, 18,
+          10, 10,  0,  0,  0,  0, 10, 10,
+         -10,-18,-22,-28,-28,-22,-18,-10,
+         -28,-36,-42,-50,-50,-42,-36,-28,
+         -36,-44,-50,-58,-58,-50,-44,-36,
+         -44,-52,-58,-66,-66,-58,-52,-44,
+         -52,-58,-64,-72,-72,-64,-58,-52,
+         -60,-66,-72,-80,-80,-72,-66,-60
+        ]
+      };
+      const glyph = { K: "♚", Q: "♛", R: "♜", B: "♝", N: "♞", P: "♟", k: "♚", q: "♛", r: "♜", b: "♝", n: "♞", p: "♟" };
+      const STOCKFISH_URL = "https://cdnjs.cloudflare.com/ajax/libs/stockfish.js/10.0.2/stockfish.js";
+      const PERSONAS = {
+        pai_bullet: {
+          name: "Mango Bullet Pai",
+          depth: 2,
+          tempo: "curto",
+          styleKey: "bullet",
+          style: "ensina bullet: lance simples, rei seguro, peca ativa e zero drama no relogio.",
+          coach: "Bullet: escolha lance bom rapido. Nao procure perfeicao; evite deixar rei e dama em perigo."
+        },
+        calmo: {
+          name: "Professor Calmo",
+          depth: 2,
+          tempo: "medio",
+          styleKey: "calmo",
+          style: "prioriza desenvolvimento, roque e explicacao limpa.",
+          coach: "Calma: veja xeques, capturas e ameacas antes de mover."
+        },
+        tatico: {
+          name: "Atacante Tatico",
+          depth: 3,
+          tempo: "medio",
+          styleKey: "tatico",
+          style: "procura capturas, xeques e pressao direta.",
+          coach: "Tatica: todo lance precisa responder: meu rei esta seguro e eu crio ameaca?"
+        },
+        solido: {
+          name: "Defensor Solido",
+          depth: 3,
+          tempo: "medio",
+          styleKey: "solido",
+          style: "troca quando convem, protege rei e evita risco bobo.",
+          coach: "Solidez: se esta melhor, simplifique; se esta pior, crie atividade."
+        },
+        carlsen: {
+          name: "Carlsen Tecnico",
+          depth: 3,
+          tempo: "medio",
+          styleKey: "tecnico",
+          style: "pressiona sem pressa: melhora peca, ganha final e reduz risco.",
+          coach: "Tecnico: troque pressa por qualidade. Pior peca melhora antes do golpe."
+        },
+        kasparov: {
+          name: "Kasparov Pressao",
+          depth: 3,
+          tempo: "medio",
+          styleKey: "pressao",
+          style: "iniciativa, desenvolvimento rapido e ataque contra rei inseguro.",
+          coach: "Pressao: desenvolva com ameaca. Se o rei rival atrasar, abra linha."
+        },
+        karpov: {
+          name: "Karpov Controle",
+          depth: 3,
+          tempo: "medio",
+          styleKey: "controle",
+          style: "profilaxia: tira contrajogo antes de empurrar vantagem.",
+          coach: "Controle: pergunte qual plano do rival voce deve impedir agora."
+        },
+        stockfish: {
+          name: "Stockfish Mentor",
+          depth: 4,
+          tempo: "forte",
+          styleKey: "forte",
+          style: "usa Stockfish online quando disponivel e cai para motor local se a rede falhar.",
+          coach: "Mentor: jogue contra uma referencia forte e leia o relatorio depois."
+        }
+      };
+      const BOOK = {
+        "start:w": {
+          pai_bullet: ["e2e4", "d2d4", "g1f3"],
+          calmo: ["d2d4", "g1f3", "e2e4"],
+          tatico: ["e2e4", "g1f3", "d2d4"],
+          solido: ["g1f3", "d2d4", "c2c4"],
+          carlsen: ["g1f3", "d2d4", "c2c4"],
+          kasparov: ["e2e4", "d2d4", "g1f3"],
+          karpov: ["d2d4", "g1f3", "c2c4"]
+        },
+        "after:e2e4:b": {
+          pai_bullet: ["e7e5", "c7c5", "e7e6"],
+          calmo: ["e7e5", "e7e6", "c7c6"],
+          tatico: ["c7c5", "g8f6", "e7e5"],
+          solido: ["e7e6", "c7c6", "d7d6"],
+          carlsen: ["e7e5", "c7c5", "g8f6"],
+          kasparov: ["c7c5", "e7e5", "g8f6"],
+          karpov: ["e7e6", "c7c6", "e7e5"]
+        },
+        "after:d2d4:b": {
+          pai_bullet: ["d7d5", "g8f6", "e7e6"],
+          calmo: ["d7d5", "g8f6", "e7e6"],
+          tatico: ["g8f6", "d7d5", "c7c5"],
+          solido: ["d7d5", "e7e6", "g8f6"],
+          carlsen: ["g8f6", "d7d5", "e7e6"],
+          kasparov: ["g8f6", "d7d5", "c7c5"],
+          karpov: ["d7d5", "e7e6", "g8f6"]
+        },
+        "after:g1f3:b": {
+          pai_bullet: ["d7d5", "g8f6", "e7e6"],
+          calmo: ["d7d5", "g8f6", "e7e6"],
+          tatico: ["g8f6", "c7c5", "d7d5"],
+          solido: ["d7d5", "e7e6", "g8f6"],
+          carlsen: ["g8f6", "d7d5", "e7e6"],
+          kasparov: ["g8f6", "c7c5", "d7d5"],
+          karpov: ["d7d5", "g8f6", "e7e6"]
+        }
+      };
+      const boardEl = document.getElementById("board");
+      const turnEl = document.getElementById("turn");
+      const fenEl = document.getElementById("fen");
+      const movesEl = document.getElementById("moves");
+      const noteEl = document.getElementById("note");
+      const modelLineEl = document.getElementById("modelLine");
+      const coachTextEl = document.getElementById("coachText");
+      const modeEl = document.getElementById("mode");
+      const personaEl = document.getElementById("persona");
+      const sideEl = document.getElementById("side");
+      const depthEl = document.getElementById("depth");
+      const coachModeEl = document.getElementById("coachMode");
+      const pieceThemeEl = document.getElementById("pieceTheme");
+      const timeControlEl = document.getElementById("timeControl");
+      const uciEl = document.getElementById("uci");
+      const clockWhiteEl = document.getElementById("clockWhite");
+      const clockBlackEl = document.getElementById("clockBlack");
+      const clockWhiteBoxEl = document.getElementById("clockWhiteBox");
+      const clockBlackBoxEl = document.getElementById("clockBlackBox");
+      const hudTurnEl = document.getElementById("hudTurn");
+      const hudCoachEl = document.getElementById("hudCoach");
+      const hudClockEl = document.getElementById("hudClock");
+      const hudScoreEl = document.getElementById("hudScore");
+      const scoreLineEl = document.getElementById("scoreLine");
+      const reportTextEl = document.getElementById("reportText");
+      const focusNowEl = document.getElementById("focusNow");
+      const focusRiskEl = document.getElementById("focusRisk");
+      const focusTempoEl = document.getElementById("focusTempo");
+      const tablebaseDemoBtnEl = document.getElementById("tablebaseDemoBtn");
+      const resolverBtnEl = document.getElementById("resolverBtn");
+      const tablebaseBtnEl = document.getElementById("tablebaseBtn");
+      const tablebaseResultEl = document.getElementById("tablebaseResult");
+
+      let state = parseFen(START);
+      let selected = -1;
+      let flipped = false;
+      let last = null;
+      const history = [];
+      const moveText = [];
+      const analysisLog = [];
+      const model = window.BLUE_MANGO_MODEL || {};
+      let stockfishWorker = null;
+      let stockfishReadyPromise = null;
+      let stockfishBusy = false;
+      const stockfishListeners = [];
+      let finalResult = null;
+      document.body.dataset.pieceTheme = pieceThemeEl.value;
+      const clock = {
+        initial: Number(timeControlEl.value) * 1000,
+        w: Number(timeControlEl.value) * 1000,
+        b: Number(timeControlEl.value) * 1000,
+        active: "w",
+        activeSince: Date.now(),
+        running: false,
+        started: false,
+        timer: null
+      };
+
+      function other(c) { return c === "w" ? "b" : "w"; }
+      function colorOf(p) { return !p || p === "." ? null : p === p.toUpperCase() ? "w" : "b"; }
+      function row(i) { return Math.floor(i / 8); }
+      function file(i) { return i & 7; }
+      function ix(r, f) { return r * 8 + f; }
+      function inside(r, f) { return r >= 0 && r < 8 && f >= 0 && f < 8; }
+      function sqToIx(s) { return (8 - Number(s[1])) * 8 + (s.charCodeAt(0) - 97); }
+      function ixToSq(i) { return String.fromCharCode(97 + file(i)) + (8 - row(i)); }
+
+      function parseFen(fen) {
+        const parts = fen.trim().split(/\s+/);
+        const b = Array(64).fill(".");
+        let n = 0;
+        for (const ch of parts[0]) {
+          if (ch === "/") continue;
+          if (/\d/.test(ch)) n += Number(ch);
+          else b[n++] = ch;
+        }
+        return { board: b, turn: parts[1], castling: parts[2] === "-" ? "" : parts[2], ep: parts[3] === "-" ? -1 : sqToIx(parts[3]), halfmove: Number(parts[4] || 0), fullmove: Number(parts[5] || 1) };
+      }
+
+      function fen() {
+        const rows = [];
+        for (let r = 0; r < 8; r++) {
+          let out = "";
+          let empty = 0;
+          for (let f = 0; f < 8; f++) {
+            const p = state.board[ix(r, f)];
+            if (p === ".") empty++;
+            else {
+              if (empty) out += empty;
+              empty = 0;
+              out += p;
+            }
+          }
+          if (empty) out += empty;
+          rows.push(out);
+        }
+        return [rows.join("/"), state.turn, state.castling || "-", state.ep >= 0 ? ixToSq(state.ep) : "-", state.halfmove, state.fullmove].join(" ");
+      }
+
+      function moveUci(m) { return ixToSq(m.from) + ixToSq(m.to) + (m.promotion ? m.promotion.toLowerCase() : ""); }
+
+      function pieceCount(s = state) {
+        return s.board.filter(p => p !== ".").length;
+      }
+
+      function attacked(s, square, by) {
+        const b = s.board;
+        const tr = row(square);
+        const tf = file(square);
+        const pawn = by === "w" ? "P" : "p";
+        const pawnSources = by === "w" ? [[tr + 1, tf - 1], [tr + 1, tf + 1]] : [[tr - 1, tf - 1], [tr - 1, tf + 1]];
+        for (const [r, f] of pawnSources) if (inside(r, f) && b[ix(r, f)] === pawn) return true;
+        const knight = by === "w" ? "N" : "n";
+        for (const [dr, df] of [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]]) if (inside(tr + dr, tf + df) && b[ix(tr + dr, tf + df)] === knight) return true;
+        const bishop = by === "w" ? "B" : "b";
+        const rook = by === "w" ? "R" : "r";
+        const queen = by === "w" ? "Q" : "q";
+        const king = by === "w" ? "K" : "k";
+        for (const [dr, df] of [[-1,-1],[-1,1],[1,-1],[1,1]]) {
+          let r = tr + dr, f = tf + df, d = 1;
+          while (inside(r, f)) {
+            const p = b[ix(r, f)];
+            if (p !== ".") { if (p === bishop || p === queen || (d === 1 && p === king)) return true; break; }
+            r += dr; f += df; d++;
+          }
+        }
+        for (const [dr, df] of [[-1,0],[1,0],[0,-1],[0,1]]) {
+          let r = tr + dr, f = tf + df, d = 1;
+          while (inside(r, f)) {
+            const p = b[ix(r, f)];
+            if (p !== ".") { if (p === rook || p === queen || (d === 1 && p === king)) return true; break; }
+            r += dr; f += df; d++;
+          }
+        }
+        return false;
+      }
+
+      function inCheck(s, color) {
+        const king = s.board.indexOf(color === "w" ? "K" : "k");
+        return king < 0 || attacked(s, king, other(color));
+      }
+
+      function push(list, s, from, to, extra = {}) {
+        const piece = s.board[from];
+        const target = s.board[to];
+        if (target !== "." && colorOf(target) === colorOf(piece)) return;
+        list.push({ from, to, piece, capture: target !== "." ? target : null, ...extra });
+      }
+
+      function pseudo(s) {
+        const list = [];
+        const us = s.turn;
+        const b = s.board;
+        for (let from = 0; from < 64; from++) {
+          const p = b[from];
+          if (p === "." || colorOf(p) !== us) continue;
+          const r = row(from), f = file(from), low = p.toLowerCase();
+          if (low === "p") {
+            const dir = us === "w" ? -1 : 1, start = us === "w" ? 6 : 1, promoRow = us === "w" ? 0 : 7;
+            const one = r + dir;
+            if (inside(one, f) && b[ix(one, f)] === ".") {
+              const to = ix(one, f);
+              if (one === promoRow) ["q","r","b","n"].forEach(pr => push(list, s, from, to, { promotion: us === "w" ? pr.toUpperCase() : pr }));
+              else {
+                push(list, s, from, to);
+                const two = r + dir * 2;
+                if (r === start && b[ix(two, f)] === ".") push(list, s, from, ix(two, f), { doublePawn: true });
+              }
+            }
+            for (const df of [-1, 1]) {
+              const cr = r + dir, cf = f + df;
+              if (!inside(cr, cf)) continue;
+              const to = ix(cr, cf), target = b[to];
+              if (target !== "." && colorOf(target) === other(us)) {
+                if (cr === promoRow) ["q","r","b","n"].forEach(pr => push(list, s, from, to, { promotion: us === "w" ? pr.toUpperCase() : pr }));
+                else push(list, s, from, to);
+              }
+              if (to === s.ep) push(list, s, from, to, { enPassant: true, capture: us === "w" ? "p" : "P" });
+            }
+          } else if (low === "n") {
+            for (const [dr, df] of [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]]) if (inside(r + dr, f + df)) push(list, s, from, ix(r + dr, f + df));
+          } else if (low === "b" || low === "r" || low === "q") {
+            const dirs = [];
+            if (low !== "r") dirs.push([-1,-1],[-1,1],[1,-1],[1,1]);
+            if (low !== "b") dirs.push([-1,0],[1,0],[0,-1],[0,1]);
+            for (const [dr, df] of dirs) {
+              let tr = r + dr, tf = f + df;
+              while (inside(tr, tf)) {
+                const to = ix(tr, tf);
+                if (b[to] === ".") push(list, s, from, to);
+                else { if (colorOf(b[to]) === other(us)) push(list, s, from, to); break; }
+                tr += dr; tf += df;
+              }
+            }
+          } else if (low === "k") {
+            for (const [dr, df] of [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]]) if (inside(r + dr, f + df)) push(list, s, from, ix(r + dr, f + df));
+            if (us === "w" && from === sqToIx("e1") && !inCheck(s, "w")) {
+              if (s.castling.includes("K") && b[sqToIx("f1")] === "." && b[sqToIx("g1")] === "." && !attacked(s, sqToIx("f1"), "b") && !attacked(s, sqToIx("g1"), "b")) push(list, s, from, sqToIx("g1"), { castle: "K" });
+              if (s.castling.includes("Q") && b[sqToIx("d1")] === "." && b[sqToIx("c1")] === "." && b[sqToIx("b1")] === "." && !attacked(s, sqToIx("d1"), "b") && !attacked(s, sqToIx("c1"), "b")) push(list, s, from, sqToIx("c1"), { castle: "Q" });
+            }
+            if (us === "b" && from === sqToIx("e8") && !inCheck(s, "b")) {
+              if (s.castling.includes("k") && b[sqToIx("f8")] === "." && b[sqToIx("g8")] === "." && !attacked(s, sqToIx("f8"), "w") && !attacked(s, sqToIx("g8"), "w")) push(list, s, from, sqToIx("g8"), { castle: "k" });
+              if (s.castling.includes("q") && b[sqToIx("d8")] === "." && b[sqToIx("c8")] === "." && b[sqToIx("b8")] === "." && !attacked(s, sqToIx("d8"), "w") && !attacked(s, sqToIx("c8"), "w")) push(list, s, from, sqToIx("c8"), { castle: "q" });
+            }
+          }
+        }
+        return list;
+      }
+
+      function stripRights(c, chars) {
+        let out = c;
+        for (const ch of chars) out = out.replace(ch, "");
+        return out;
+      }
+
+      function make(s, m) {
+        const b = s.board.slice(), us = s.turn, them = other(us), piece = b[m.from];
+        const captured = m.enPassant ? (us === "w" ? "p" : "P") : b[m.to];
+        b[m.from] = ".";
+        if (m.enPassant) b[us === "w" ? m.to + 8 : m.to - 8] = ".";
+        b[m.to] = m.promotion || piece;
+        if (m.castle === "K") { b[sqToIx("h1")] = "."; b[sqToIx("f1")] = "R"; }
+        if (m.castle === "Q") { b[sqToIx("a1")] = "."; b[sqToIx("d1")] = "R"; }
+        if (m.castle === "k") { b[sqToIx("h8")] = "."; b[sqToIx("f8")] = "r"; }
+        if (m.castle === "q") { b[sqToIx("a8")] = "."; b[sqToIx("d8")] = "r"; }
+        let castling = s.castling;
+        if (piece === "K") castling = stripRights(castling, "KQ");
+        if (piece === "k") castling = stripRights(castling, "kq");
+        if (m.from === sqToIx("h1") || m.to === sqToIx("h1")) castling = stripRights(castling, "K");
+        if (m.from === sqToIx("a1") || m.to === sqToIx("a1")) castling = stripRights(castling, "Q");
+        if (m.from === sqToIx("h8") || m.to === sqToIx("h8")) castling = stripRights(castling, "k");
+        if (m.from === sqToIx("a8") || m.to === sqToIx("a8")) castling = stripRights(castling, "q");
+        return { board: b, turn: them, castling, ep: m.doublePawn ? (us === "w" ? m.from - 8 : m.from + 8) : -1, halfmove: piece.toLowerCase() === "p" || captured !== "." ? 0 : s.halfmove + 1, fullmove: us === "b" ? s.fullmove + 1 : s.fullmove };
+      }
+
+      function legal(s = state) {
+        const us = s.turn;
+        return pseudo(s).filter(m => !inCheck(make(s, m), us));
+      }
+
+      function pieceSquare(p, i) {
+        const table = pst[p.toLowerCase()];
+        if (!table) return 0;
+        return colorOf(p) === "w" ? table[i] : table[63 - i];
+      }
+
+      function fileHasPawn(s, f, color = null) {
+        for (let r = 0; r < 8; r++) {
+          const p = s.board[ix(r, f)];
+          if (p.toLowerCase && p.toLowerCase() === "p" && (!color || colorOf(p) === color)) return true;
+        }
+        return false;
+      }
+
+      function pawnStructureScore(s, side) {
+        const pawnsByFile = Array(8).fill(0);
+        for (let i = 0; i < 64; i++) {
+          const p = s.board[i];
+          if (p.toLowerCase && p.toLowerCase() === "p" && colorOf(p) === side) pawnsByFile[file(i)]++;
+        }
+        let score = 0;
+        for (let f = 0; f < 8; f++) {
+          if (pawnsByFile[f] > 1) score -= (pawnsByFile[f] - 1) * 14;
+          if (pawnsByFile[f] && !pawnsByFile[f - 1] && !pawnsByFile[f + 1]) score -= 10;
+        }
+        return score;
+      }
+
+      function kingSafetyScore(s, side) {
+        const king = s.board.indexOf(side === "w" ? "K" : "k");
+        if (king < 0) return -MATE / 2;
+        const r = row(king), f = file(king);
+        let score = 0;
+        const homeRank = side === "w" ? 7 : 0;
+        if (r === homeRank && (f === 6 || f === 1 || f === 2)) score += 34;
+        if (r === homeRank && (f === 3 || f === 4)) score -= 26;
+        const shieldRank = side === "w" ? r - 1 : r + 1;
+        for (const df of [-1, 0, 1]) {
+          const sf = f + df;
+          if (inside(shieldRank, sf)) {
+            const p = s.board[ix(shieldRank, sf)];
+            if (p.toLowerCase && p.toLowerCase() === "p" && colorOf(p) === side) score += 8;
+            else score -= 6;
+          }
+        }
+        if (attacked(s, king, other(side))) score -= 45;
+        return score;
+      }
+
+      function developmentScore(s, side) {
+        const home = side === "w"
+          ? [{ sq: "b1", p: "N" }, { sq: "g1", p: "N" }, { sq: "c1", p: "B" }, { sq: "f1", p: "B" }]
+          : [{ sq: "b8", p: "n" }, { sq: "g8", p: "n" }, { sq: "c8", p: "b" }, { sq: "f8", p: "b" }];
+        let score = 0;
+        for (const item of home) if (s.board[sqToIx(item.sq)] === item.p) score -= 15;
+        const queenHome = side === "w" ? sqToIx("d1") : sqToIx("d8");
+        const queen = side === "w" ? "Q" : "q";
+        if (moveText.length < 8 && s.board[queenHome] !== queen) score -= 12;
+        return score;
+      }
+
+      function rookFileScore(s, side) {
+        let score = 0;
+        for (let i = 0; i < 64; i++) {
+          const p = s.board[i];
+          if (p.toLowerCase && p.toLowerCase() === "r" && colorOf(p) === side) {
+            const f = file(i);
+            if (!fileHasPawn(s, f)) score += 18;
+            else if (!fileHasPawn(s, f, side)) score += 9;
+          }
+        }
+        return score;
+      }
+
+      function sideFeatures(s, side) {
+        let bishops = 0;
+        let score = pawnStructureScore(s, side) + kingSafetyScore(s, side) + developmentScore(s, side) + rookFileScore(s, side);
+        for (let i = 0; i < 64; i++) {
+          const p = s.board[i];
+          if (p === "." || colorOf(p) !== side) continue;
+          score += value[p.toLowerCase()] + pieceSquare(p, i);
+          if (p.toLowerCase() === "b") bishops++;
+        }
+        if (bishops >= 2) score += 28;
+        const savedTurn = s.turn;
+        s.turn = side;
+        score += Math.min(pseudo(s).length, 42) * 2;
+        s.turn = savedTurn;
+        return score;
+      }
+
+      function evalAbs(s) {
+        return sideFeatures(s, "w") - sideFeatures(s, "b");
+      }
+
+      function scoreForTurn(s) {
+        return s.turn === "w" ? evalAbs(s) : -evalAbs(s);
+      }
+
+      function movePriority(s, m) {
+        let score = 0;
+        if (m.capture) score += 10000 + value[m.capture.toLowerCase()] * 10 - value[m.piece.toLowerCase()];
+        if (m.promotion) score += 8500 + value[m.promotion.toLowerCase()];
+        if (m.castle) score += 420;
+        const child = make(s, m);
+        if (inCheck(child, child.turn)) score += 700;
+        const toR = row(m.to), toF = file(m.to);
+        score += Math.round(24 - (Math.abs(toR - 3.5) + Math.abs(toF - 3.5)) * 5);
+        return score;
+      }
+
+      function ordered(s, ms) {
+        return ms.slice().sort((a, b) => {
+          return movePriority(s, b) - movePriority(s, a) || moveUci(a).localeCompare(moveUci(b));
+        });
+      }
+
+      function qsearch(s, alpha, beta, ply, qDepth = 0) {
+        const ms = legal(s);
+        if (!ms.length) return inCheck(s, s.turn) ? -MATE + ply : 0;
+        const inDanger = inCheck(s, s.turn);
+        let stand = scoreForTurn(s);
+        if (!inDanger) {
+          if (stand >= beta) return beta;
+          if (stand > alpha) alpha = stand;
+        }
+        if (qDepth >= 3) return inDanger ? stand : alpha;
+        const noisy = ordered(s, inDanger ? ms : ms.filter(m => m.capture || m.promotion));
+        for (const m of noisy) {
+          const val = -qsearch(make(s, m), -beta, -alpha, ply + 1, qDepth + 1);
+          if (val >= beta) return beta;
+          if (val > alpha) alpha = val;
+        }
+        return alpha;
+      }
+
+      function search(s, depth, alpha, beta, ply) {
+        const ms = legal(s);
+        if (!ms.length) return { value: inCheck(s, s.turn) ? -MATE + ply : 0, pv: [] };
+        if (depth === 0 || s.halfmove >= 150) return { value: qsearch(s, alpha, beta, ply), pv: [] };
+        let best = null, bestPv = [], bestVal = -INF;
+        for (const m of ordered(s, ms)) {
+          const child = search(make(s, m), depth - 1, -beta, -alpha, ply + 1);
+          const val = -child.value;
+          if (val > bestVal) { bestVal = val; best = m; bestPv = [moveUci(m), ...child.pv]; }
+          alpha = Math.max(alpha, val);
+          if (alpha >= beta) break;
+        }
+        return { value: bestVal, move: best, pv: bestPv };
+      }
+
+      function bookKey() {
+        if (!moveText.length && state.turn === "w") return "start:w";
+        if (moveText.length === 1 && state.turn === "b") return `after:${moveText[0]}:b`;
+        return "";
+      }
+
+      function bookMove(p) {
+        const lines = BOOK[bookKey()];
+        if (!lines) return null;
+        const choices = lines[p.styleKey] || lines[personaEl.value] || lines.pai_bullet || [];
+        for (const uci of choices) {
+          const move = legalByUci(uci);
+          if (move) return move;
+        }
+        return null;
+      }
+
+      function moveStyleBias(s, m, p) {
+        const child = make(s, m);
+        const us = s.turn;
+        const low = m.piece.toLowerCase();
+        let bias = 0;
+        if (inCheck(child, child.turn)) bias += p.styleKey === "pressao" || p.styleKey === "tatico" ? 55 : 20;
+        if (m.capture) bias += p.styleKey === "tatico" || p.styleKey === "pressao" ? 35 : 12;
+        if (m.castle) bias += p.styleKey === "controle" || p.styleKey === "solido" || p.styleKey === "calmo" ? 55 : 28;
+        if (low === "n" || low === "b") {
+          const fromHome = ["b1","g1","c1","f1","b8","g8","c8","f8"].includes(ixToSq(m.from));
+          if (fromHome) bias += p.styleKey === "bullet" ? 35 : 22;
+        }
+        if (low === "p" && (file(m.to) === 3 || file(m.to) === 4)) bias += p.styleKey === "bullet" ? 22 : 14;
+        if (low === "q" && moveText.length < 8) bias -= p.styleKey === "pressao" ? 8 : 28;
+        const king = child.board.indexOf(us === "w" ? "K" : "k");
+        if (king >= 0 && attacked(child, king, child.turn)) bias -= 90;
+        if (p.styleKey === "tecnico") bias += Math.round((evalAbs(child) * (us === "w" ? 1 : -1)) / 80);
+        if (p.styleKey === "controle") bias += kingSafetyScore(child, us) / 2;
+        return bias;
+      }
+
+      function rootSearch(s, depth, p) {
+        const ms = ordered(s, legal(s));
+        let best = null, bestVal = -INF, bestPv = [];
+        for (const m of ms) {
+          const child = search(make(s, m), Math.max(0, depth - 1), -INF, INF, 1);
+          const val = -child.value + moveStyleBias(s, m, p);
+          if (val > bestVal) {
+            bestVal = val;
+            best = m;
+            bestPv = [moveUci(m), ...child.pv];
+          }
+        }
+        return { value: bestVal, move: best, pv: bestPv };
+      }
+
+      function ensureStockfish() {
+        if (!window.Worker) return Promise.reject(new Error("worker_indisponivel"));
+        if (stockfishReadyPromise) return stockfishReadyPromise;
+        stockfishReadyPromise = new Promise((resolve, reject) => {
+          const blob = new Blob([`importScripts("${STOCKFISH_URL}");`], { type: "application/javascript" });
+          const url = URL.createObjectURL(blob);
+          const worker = new Worker(url);
+          stockfishWorker = worker;
+          const timeout = window.setTimeout(() => reject(new Error("stockfish_timeout")), 7000);
+          worker.onmessage = event => {
+            const line = String(event.data || "");
+            stockfishListeners.slice().forEach(listener => listener(line));
+            if (line === "uciok") {
+              window.clearTimeout(timeout);
+              resolve(worker);
+            }
+          };
+          worker.onerror = error => {
+            window.clearTimeout(timeout);
+            reject(error);
+          };
+          worker.postMessage("uci");
+        });
+        stockfishReadyPromise = stockfishReadyPromise.catch(error => {
+          stockfishReadyPromise = null;
+          stockfishWorker = null;
+          throw error;
+        });
+        return stockfishReadyPromise;
+      }
+
+      async function stockfishBestMove() {
+        if (stockfishBusy) throw new Error("stockfish_busy");
+        stockfishBusy = true;
+        const worker = await ensureStockfish();
+        return new Promise((resolve, reject) => {
+          const timeout = window.setTimeout(() => cleanup(() => reject(new Error("bestmove_timeout"))), 9000);
+          const listener = line => {
+            if (!line.startsWith("bestmove ")) return;
+            const uci = line.split(/\s+/)[1] || "";
+            cleanup(() => resolve(legalByUci(uci)));
+          };
+          function cleanup(done) {
+            window.clearTimeout(timeout);
+            stockfishBusy = false;
+            const index = stockfishListeners.indexOf(listener);
+            if (index >= 0) stockfishListeners.splice(index, 1);
+            done();
+          }
+          stockfishListeners.push(listener);
+          worker.postMessage("ucinewgame");
+          worker.postMessage("position fen " + fen());
+          worker.postMessage("go movetime 900");
+        });
+      }
+
+      function legalByUci(text) {
+        const want = text.trim().toLowerCase();
+        return legal().find(m => moveUci(m).toLowerCase() === want || moveUci(m).slice(0, 4).toLowerCase() === want);
+      }
+
+      function sideName(side) {
+        return side === "w" ? "Brancas" : "Pretas";
+      }
+
+      function persona() {
+        return PERSONAS[personaEl.value] || PERSONAS.pai_bullet;
+      }
+
+      function cloneClock() {
+        return { initial: clock.initial, w: clock.w, b: clock.b, active: clock.active, running: clock.running, started: clock.started };
+      }
+
+      function restoreClock(saved) {
+        clock.initial = saved.initial;
+        clock.w = saved.w;
+        clock.b = saved.b;
+        clock.active = saved.active;
+        clock.started = !!saved.started;
+        clock.running = saved.running && clock.started && !finalResult && clock.initial > 0;
+        clock.activeSince = Date.now();
+      }
+
+      function stopClock() {
+        clock.running = false;
+      }
+
+      function resetClock() {
+        clock.initial = Number(timeControlEl.value) * 1000;
+        clock.w = clock.initial;
+        clock.b = clock.initial;
+        clock.active = "w";
+        clock.activeSince = Date.now();
+        clock.running = false;
+        clock.started = false;
+      }
+
+      function debitClock(now = Date.now()) {
+        if (!clock.running || finalResult || clock.initial <= 0) return;
+        const spent = Math.max(0, now - clock.activeSince);
+        clock[clock.active] = Math.max(0, clock[clock.active] - spent);
+        clock.activeSince = now;
+        if (clock[clock.active] <= 0) {
+          setFinalResult({ type: "tempo", winner: other(clock.active), loser: clock.active });
+          render();
+        }
+      }
+
+      function passClock(mover) {
+        if (clock.initial <= 0 || finalResult) return;
+        const now = Date.now();
+        if (!clock.started) {
+          clock.started = true;
+          clock.running = true;
+          clock.active = mover;
+          clock.activeSince = now;
+        }
+        if (!clock.running) return;
+        if (clock.active !== mover) {
+          clock.active = mover;
+          clock.activeSince = now;
+        }
+        debitClock(now);
+        if (!finalResult) {
+          clock.active = other(mover);
+          clock.activeSince = now;
+        }
+      }
+
+      function visibleClock(side) {
+        if (clock.initial <= 0) return 0;
+        if (!clock.started) return clock[side];
+        if (!clock.running || finalResult || clock.active !== side) return clock[side];
+        return Math.max(0, clock[side] - (Date.now() - clock.activeSince));
+      }
+
+      function formatClock(ms) {
+        const total = Math.max(0, Math.ceil(ms / 1000));
+        const m = Math.floor(total / 60);
+        const s = total % 60;
+        return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+      }
+
+      function qualityFromLoss(loss) {
+        if (loss <= 20) return { score: 100, tag: "excelente" };
+        if (loss <= 60) return { score: 92, tag: "bom" };
+        if (loss <= 140) return { score: 78, tag: "impreciso" };
+        if (loss <= 300) return { score: 58, tag: "erro" };
+        return { score: 32, tag: "grave" };
+      }
+
+      function analyzeMove(before, m) {
+        const mover = before.turn;
+        const ms = legal(before);
+        if (!ms.length) return;
+        const depth = persona().tempo === "curto" ? 1 : 2;
+        const best = search(before, depth, -INF, INF, 0);
+        const after = search(make(before, m), Math.max(0, depth - 1), -INF, INF, 1);
+        const playedValue = -after.value;
+        const rawLoss = Math.max(0, best.value - playedValue);
+        const loss = Math.min(900, Math.round(rawLoss));
+        const quality = qualityFromLoss(loss);
+        analysisLog.push({
+          side: mover,
+          move: moveUci(m),
+          best: best.move ? moveUci(best.move) : moveUci(m),
+          loss,
+          score: quality.score,
+          tag: quality.tag,
+          moveNumber: Math.floor(moveText.length / 2) + 1
+        });
+      }
+
+      function trackedSides() {
+        if (modeEl.value === "ai") return [sideEl.value];
+        const sides = [...new Set(analysisLog.map(item => item.side))];
+        return sides.length ? sides : ["w", "b"];
+      }
+
+      function sideScore(side) {
+        const items = analysisLog.filter(item => item.side === side);
+        if (!items.length) return null;
+        let score = Math.round(items.reduce((sum, item) => sum + item.score, 0) / items.length);
+        if (finalResult && finalResult.loser === side) {
+          score = Math.min(score, finalResult.type === "tempo" ? 55 : 42);
+        }
+        if (finalResult && finalResult.winner === side) {
+          score = Math.max(score, finalResult.type === "tempo" ? 82 : 92);
+        }
+        return score;
+      }
+
+      function scoreLabel(score) {
+        if (score >= 94) return "excelente";
+        if (score >= 84) return "boa";
+        if (score >= 70) return "ok";
+        if (score >= 55) return "instavel";
+        return "precisa treino";
+      }
+
+      function issueAdvice(item) {
+        if (!item) return "Jogue mais alguns lances para o Mango montar um diagnostico.";
+        if (finalResult && finalResult.type === "mate" && item.side === finalResult.loser) {
+          return `Momento critico: ${item.move} deixou o rei entrar na rede de mate. Em bullet, antes de empurrar peao perto do rei, cheque se dama ou bispo inimigo chegam com xeque.`;
+        }
+        if (finalResult && finalResult.type === "tempo" && item.side === finalResult.loser) {
+          return `Momento critico: a partida caiu no relogio. Para bullet, escolha lance seguro antes dos 10 segundos e pare de recalcular a mesma variante.`;
+        }
+        if (item.loss <= 60) {
+          return `Bom lance: ${item.move} manteve a posicao saudavel. Para bullet, preserve esse padrao: centro, desenvolvimento, rei seguro e decisao rapida.`;
+        }
+        if (personaEl.value === "pai_bullet") {
+          return `Bullet melhor: no lance ${item.moveNumber}, ${item.move} perdeu tempo/qualidade. Plano: olhar xeque, captura e ameaca em 3 segundos; se nada aparecer, desenvolver peca ou proteger o rei.`;
+        }
+        if (item.loss >= 300) return `Maior ajuste: antes de ${item.move}, procure xeques e capturas do adversario. Melhor candidato local: ${item.best}.`;
+        if (item.loss >= 120) return `Ajuste fino: ${item.move} foi impreciso. Compare com ${item.best} e pergunte qual peca fica mais ativa.`;
+        return `Bom caminho. Melhorar agora e reduzir hesitacao: escolha planos simples e nao gaste tempo procurando golpe inexistente.`;
+      }
+
+      function resultText() {
+        if (!finalResult) return "";
+        if (finalResult.type === "empate") return "Empate anunciado.";
+        const win = sideName(finalResult.winner);
+        const reason = finalResult.type === "tempo" ? "no tempo" : "por xeque-mate";
+        if (modeEl.value === "ai") {
+          if (finalResult.winner === sideEl.value) return `Vitoria: ${win} vencem ${reason}.`;
+          return `Derrota: ${win} vencem ${reason}.`;
+        }
+        return `${win} vencem ${reason}.`;
+      }
+
+      function setFinalResult(result) {
+        if (finalResult) return;
+        finalResult = result;
+        stopClock();
+        note(resultText() || "Partida encerrada.");
+      }
+
+      function updateClocks() {
+        const whiteMs = clock.initial <= 0 ? 0 : visibleClock("w");
+        const blackMs = clock.initial <= 0 ? 0 : visibleClock("b");
+        clockWhiteEl.textContent = clock.initial <= 0 ? "--:--" : formatClock(whiteMs);
+        clockBlackEl.textContent = clock.initial <= 0 ? "--:--" : formatClock(blackMs);
+        clockWhiteEl.classList.toggle("low", whiteMs > 0 && whiteMs <= 10000);
+        clockBlackEl.classList.toggle("low", blackMs > 0 && blackMs <= 10000);
+        clockWhiteBoxEl.classList.toggle("active", clock.running && !finalResult && clock.active === "w");
+        clockBlackBoxEl.classList.toggle("active", clock.running && !finalResult && clock.active === "b");
+        hudClockEl.textContent = clock.initial <= 0
+          ? "Sem relogio"
+          : `B ${formatClock(whiteMs)} | P ${formatClock(blackMs)}`;
+      }
+
+      function updateReport() {
+        const sides = trackedSides();
+        const lines = sides.map(side => {
+          const score = sideScore(side);
+          return score === null ? `${sideName(side)}: sem nota` : `${sideName(side)}: ${score}/100 (${scoreLabel(score)})`;
+        });
+        scoreLineEl.textContent = `Pontuacao: ${lines.join(" | ")}`;
+        let candidates = analysisLog.filter(item => sides.includes(item.side));
+        if (finalResult && finalResult.loser) {
+          const loserMoves = candidates.filter(item => item.side === finalResult.loser);
+          if (loserMoves.length) candidates = loserMoves.slice(-1);
+        }
+        const worst = candidates.slice().sort((a, b) => b.loss - a.loss)[0];
+        const personaLine = `${persona().name}: ${persona().coach}`;
+        const resultLine = finalResult ? `${resultText()}\n` : "";
+        reportTextEl.textContent = `${resultLine}${personaLine}\n${issueAdvice(worst)}`;
+      }
+
+      function hudScoreText() {
+        const side = modeEl.value === "ai" ? sideEl.value : state.turn;
+        const score = sideScore(side);
+        if (score === null) return "Sem nota";
+        return `${score}/100 ${scoreLabel(score)}`;
+      }
+
+      function hudCoachText(text) {
+        const lines = String(text || "")
+          .split(/\n+/)
+          .map(line => line.replace(/^(Olhe|Ideia|Faca|Calcule):\s*/i, "").trim())
+          .filter(Boolean);
+        const chosen = lines[lines.length - 1] || lines[0] || "Jogue simples e mantenha o rei seguro.";
+        return chosen.length > 74 ? `${chosen.slice(0, 71)}...` : chosen;
+      }
+
+      function updateHud(ms, status, coachLine) {
+        if (finalResult) {
+          hudTurnEl.textContent = resultText() || "Partida encerrada";
+          hudCoachEl.textContent = "Revise o relatorio e reinicie limpo.";
+          hudScoreEl.textContent = hudScoreText();
+          return;
+        }
+        const side = state.turn === "w" ? "Brancas" : "Pretas";
+        if (modeEl.value === "ai" && state.turn !== sideEl.value) {
+          hudTurnEl.textContent = `${persona().name} pensa`;
+        } else if (status === "xeque") {
+          hudTurnEl.textContent = `Xeque: ${side}`;
+        } else {
+          hudTurnEl.textContent = `${side} jogam`;
+        }
+        hudCoachEl.textContent = hudCoachText(coachLine);
+        hudScoreEl.textContent = hudScoreText();
+      }
+
+      function updateFocus(ms, status) {
+        const us = state.turn;
+        const captures = ms.filter(m => m.capture);
+        const checks = ms.filter(m => inCheck(make(state, m), other(us)));
+        const undeveloped = us === "w"
+          ? ["b1", "g1", "c1", "f1"].some(sq => state.board[sqToIx(sq)] !== ".")
+          : ["b8", "g8", "c8", "f8"].some(sq => state.board[sqToIx(sq)] !== ".");
+        if (finalResult) {
+          focusNowEl.textContent = finalResult.type === "empate" ? "Revisar" : "Relatorio";
+          focusRiskEl.textContent = finalResult.type === "tempo" ? "Tempo" : finalResult.type === "mate" ? "Rei" : "Nenhum";
+          focusTempoEl.textContent = "Fim";
+          return;
+        }
+        if (status === "xeque") focusNowEl.textContent = "Salvar rei";
+        else if (checks.length) focusNowEl.textContent = "Xeque existe";
+        else if (captures.length) focusNowEl.textContent = "Captura";
+        else if (moveText.length < 10 && undeveloped) focusNowEl.textContent = "Desenvolver";
+        else focusNowEl.textContent = "Melhorar peca";
+
+        const clockLeft = visibleClock(us);
+        if (status === "xeque") focusRiskEl.textContent = "Xeque";
+        else if (clock.initial > 0 && clockLeft <= 15000) focusRiskEl.textContent = "Relogio";
+        else if (kingSafetyScore(state, us) < -20) focusRiskEl.textContent = "Rei exposto";
+        else focusRiskEl.textContent = "Controlado";
+
+        if (clock.initial <= 0) focusTempoEl.textContent = "Livre";
+        else if (!clock.started) focusTempoEl.textContent = "Pronto";
+        else if (clockLeft <= 10000) focusTempoEl.textContent = "Instantaneo";
+        else if (personaEl.value === "pai_bullet") focusTempoEl.textContent = "3 segundos";
+        else focusTempoEl.textContent = "Calmo";
+      }
+
+      function updateTablebaseHint() {
+        const count = pieceCount();
+        if (count <= 7) {
+          tablebaseResultEl.textContent = `${count} pecas: posicao elegivel para prova exata por tablebase.`;
+        } else {
+          tablebaseResultEl.textContent = `${count} pecas: fora da tablebase publica; segue como H1 operacional.`;
+        }
+      }
+
+      function tablebaseCategoryText(category) {
+        const map = {
+          win: "vitoria forcada",
+          "syzygy-win": "vitoria forcada",
+          "maybe-win": "vitoria provavel/limitada",
+          "cursed-win": "ganho, mas regra dos 50 lances pesa",
+          draw: "empate forcado",
+          loss: "derrota forcada",
+          "syzygy-loss": "derrota forcada",
+          "maybe-loss": "derrota provavel/limitada",
+          "blessed-loss": "perdido, mas regra dos 50 lances pode salvar",
+          unknown: "desconhecido"
+        };
+        return map[category] || category || "desconhecido";
+      }
+
+      function tablebaseBestMove(data) {
+        if (!data || !Array.isArray(data.moves) || !data.moves.length) return "sem lance indicado";
+        const best = data.moves[0];
+        return `${best.san || best.uci || "?"} (preserva ${tablebaseCategoryText(data.category)})`;
+      }
+
+      function localScoreText(score) {
+        if (Math.abs(score) > MATE - 1000) {
+          const plies = MATE - Math.abs(score);
+          return score > 0 ? `mate em ${Math.ceil(plies / 2)}` : `levando mate em ${Math.ceil(plies / 2)}`;
+        }
+        return `${Math.round(score)}cp`;
+      }
+
+      function resolverDepth() {
+        if (depthEl.value === "1" || depthEl.value === "2" || depthEl.value === "3" || depthEl.value === "4") {
+          return Number(depthEl.value);
+        }
+        return persona().tempo === "curto" ? 2 : 3;
+      }
+
+      function renderResolveData(data, sourceLabel) {
+        const best = data.bestMove
+          ? typeof data.bestMove === "string"
+            ? data.bestMove
+            : data.bestMove.san || data.bestMove.uci || "sem lance"
+          : data.best_move || "sem lance";
+        const pv = Array.isArray(data.pv) && data.pv.length ? `\nLinha: ${data.pv.slice(0, 5).join(" ")}` : "";
+        const category = data.categoryText || tablebaseCategoryText(data.category);
+        const score = data.score ? `\nAvaliacao: ${data.score}.` : "";
+        const depth = data.depth ? ` Profundidade ${data.depth}.` : "";
+        const legal = Number.isFinite(data.legalMoves) ? ` Lances legais: ${data.legalMoves}.` : "";
+        const proof = data.classification === "PROOF"
+          ? `PROOF: ${category}.`
+          : data.classification === "IMPASSE"
+            ? "IMPASSE: sem certificado completo para esta arvore."
+            : "HYPOTHESIS: melhor politica por busca limitada.";
+        tablebaseResultEl.textContent =
+          `${proof}\n` +
+          `Camada: ${sourceLabel}.${depth}${legal}\n` +
+          `Melhor lance: ${best}.${score}${pv}\n` +
+          `${data.message || data.proofStatus || ""}`;
+      }
+
+      async function fetchResolveFromBackend(depth) {
+        const ports = [8787, 8788];
+        for (const port of ports) {
+          const controller = new AbortController();
+          const timeout = window.setTimeout(() => controller.abort(), 1200);
+          try {
+            const url = `http://127.0.0.1:${port}/resolve?depth=${depth}&fen=${encodeURIComponent(fen())}`;
+            const response = await fetch(url, { cache: "no-store", signal: controller.signal });
+            if (response.ok) {
+              const data = await response.json();
+              window.clearTimeout(timeout);
+              return { data, source: `backend local :${port}` };
+            }
+          } catch {
+            // Backend local e opcional; fallback roda no proprio navegador.
+          } finally {
+            window.clearTimeout(timeout);
+          }
+        }
+        return null;
+      }
+
+      function localResolve(depth) {
+        const ms = legal();
+        if (!ms.length) {
+          return {
+            classification: inCheck(state, state.turn) ? "PROOF" : "PROOF",
+            bestMove: null,
+            score: inCheck(state, state.turn) ? "mate confirmado" : "empate confirmado",
+            legalMoves: 0,
+            message: "Estado terminal provado pelo gerador de lances legais.",
+          };
+        }
+        const result = rootSearch(state, depth, persona());
+        const isStart = fen() === START;
+        return {
+          classification: isStart ? "IMPASSE" : "HYPOTHESIS",
+          depth,
+          bestMove: result.move ? moveUci(result.move) : null,
+          score: localScoreText(result.value),
+          legalMoves: ms.length,
+          pv: result.pv,
+          message: isStart
+            ? "A posicao inicial do xadrez ainda nao tem certificado publico completo; isto e politica operacional."
+            : "Fallback front-end: calculo local limitado para treino, nao prova total.",
+        };
+      }
+
+      async function resolvePositionDv() {
+        const depth = resolverDepth();
+        const count = pieceCount();
+        tablebaseResultEl.textContent = `Resolvendo posicao DV (${count} pecas)...`;
+        const backend = await fetchResolveFromBackend(depth);
+        if (backend) {
+          renderResolveData(backend.data, backend.source);
+          return;
+        }
+        if (count <= 7) {
+          await probeTablebase();
+          return;
+        }
+        renderResolveData(localResolve(depth), "front-end local");
+      }
+
+      async function probeTablebase() {
+        const count = pieceCount();
+        if (count > 7) {
+          tablebaseResultEl.textContent = `Impasse atual: ${count} pecas no tabuleiro. Tablebase publica cobre finais pequenos; reduza para ate 7 pecas para prova exata.`;
+          return;
+        }
+        tablebaseResultEl.textContent = "Consultando tablebase Syzygy/Lichess...";
+        try {
+          const url = `https://tablebase.lichess.ovh/standard?fen=${encodeURIComponent(fen())}`;
+          const response = await fetch(url, { cache: "no-store" });
+          if (!response.ok) throw new Error(`http_${response.status}`);
+          const data = await response.json();
+          const winner = data.category && /win/.test(data.category)
+            ? sideName(state.turn)
+            : data.category && /loss/.test(data.category)
+              ? sideName(other(state.turn))
+              : "ninguem";
+          const dtz = Number.isFinite(data.dtz) ? `DTZ ${data.dtz}` : "DTZ n/d";
+          tablebaseResultEl.textContent =
+            `Resolvido por tablebase (${count} pecas): ${tablebaseCategoryText(data.category)}.\n` +
+            `Vencedor teorico: ${winner}. ${dtz}.\n` +
+            `Melhor lance: ${tablebaseBestMove(data)}.`;
+        } catch {
+          tablebaseResultEl.textContent = "Tablebase indisponivel agora. O impasse nao e teorico; e falha de consulta externa.";
+        }
+      }
+
+      function coachAdvice(ms, status) {
+        const us = state.turn;
+        const plies = moveText.length;
+        const sideName = us === "w" ? "brancas" : "pretas";
+        if (!ms.length) {
+          return status === "mate"
+            ? "Fim de jogo: mate confirmado. Refaca os ultimos lances e procure onde o rei ficou sem casas."
+            : "Empate confirmado. Boa hora para revisar se havia uma ruptura de peao ou uma troca melhor antes.";
+        }
+        if (inCheck(state, us)) {
+          return "Primeiro resolva o xeque: mover o rei, capturar a peca atacante ou bloquear a linha. So depois pense em ataque.";
+        }
+        if (plies < 2) {
+          return "Plano simples de abertura: controle o centro, desenvolva uma peca leve e mantenha o rei seguro.";
+        }
+        const home = us === "w"
+          ? [{ sq: "b1", name: "cavalo" }, { sq: "g1", name: "cavalo" }, { sq: "c1", name: "bispo" }, { sq: "f1", name: "bispo" }]
+          : [{ sq: "b8", name: "cavalo" }, { sq: "g8", name: "cavalo" }, { sq: "c8", name: "bispo" }, { sq: "f8", name: "bispo" }];
+        const undeveloped = home.filter(item => state.board[sqToIx(item.sq)] !== ".");
+        if (plies < 12 && undeveloped.length) {
+          return `Mango sugere desenvolver: ainda tem ${undeveloped[0].name} parado. Coloque peca em jogo antes de buscar golpe.`;
+        }
+        const canCastle = (us === "w" && /K|Q/.test(state.castling)) || (us === "b" && /k|q/.test(state.castling));
+        if (plies >= 6 && canCastle) {
+          return `Para as ${sideName}, rocar cedo costuma reduzir sustos. Veja se o caminho esta livre e seguro.`;
+        }
+        const captures = ms.filter(m => m.capture);
+        if (captures.length) {
+          const best = captures
+            .slice()
+            .sort((a, b) => value[b.capture.toLowerCase()] - value[a.capture.toLowerCase()])[0];
+          return `Existe captura em ${moveUci(best)}. Antes de tomar, confira se a peca que captura fica protegida.`;
+        }
+        return "Sem urgencia: melhore sua pior peca, ataque o centro ou crie uma ameaca pequena que obrigue resposta.";
+      }
+
+      function coachAdvice2(ms, status) {
+        const us = state.turn;
+        const plies = moveText.length;
+        const sideName = us === "w" ? "brancas" : "pretas";
+        const mode = coachModeEl.value;
+        function pack(look, idea, act) {
+          if (mode === "fast") return `${look} ${act}`;
+          if (mode === "tactic") return `Olhe: ${look}\nCalcule: ${idea}\nLance: ${act}`;
+          return `Olhe: ${look}\nIdeia: ${idea}\nFaca: ${act}`;
+        }
+        if (!finalResult && personaEl.value === "pai_bullet" && clock.initial > 0 && visibleClock(us) <= 30000) {
+          return pack("relogio baixo.", "bullet pune pensamento comprido mais que lance levemente impreciso.", "jogue lance legal simples: cheque, captura segura, defesa do rei ou desenvolvimento.");
+        }
+        if (!ms.length) {
+          return status === "mate"
+            ? pack("o rei ficou sem casa.", "o mate veio de uma ameaca nao neutralizada.", "volte um lance e procure defesa do rei.")
+            : pack("nao existe lance legal.", "o empate costuma nascer de bloqueio ou repeticao.", "revise se havia ruptura de peao antes.");
+        }
+        if (inCheck(state, us)) {
+          return pack("seu rei esta em xeque.", "ataque agora e secundario; rei seguro vem primeiro.", "mova o rei, capture a peca atacante ou bloqueie a linha.");
+        }
+        if (plies < 2) {
+          return pack("centro e rei.", "quem domina o centro escolhe melhor os proximos lances.", "jogue um peao central ou desenvolva cavalo/bispo.");
+        }
+        const home = us === "w"
+          ? [{ sq: "b1", name: "cavalo" }, { sq: "g1", name: "cavalo" }, { sq: "c1", name: "bispo" }, { sq: "f1", name: "bispo" }]
+          : [{ sq: "b8", name: "cavalo" }, { sq: "g8", name: "cavalo" }, { sq: "c8", name: "bispo" }, { sq: "f8", name: "bispo" }];
+        const undeveloped = home.filter(item => state.board[sqToIx(item.sq)] !== ".");
+        if (plies < 12 && undeveloped.length) {
+          return pack(`${undeveloped[0].name} ainda esta parado.`, "peca parada nao defende, nao ataca e nao cria plano.", `desenvolva esse ${undeveloped[0].name} antes de buscar golpe.`);
+        }
+        const canCastle = (us === "w" && /K|Q/.test(state.castling)) || (us === "b" && /k|q/.test(state.castling));
+        if (plies >= 6 && canCastle) {
+          return pack(`rei das ${sideName} ainda pode rocar.`, "roque tira o rei do centro e conecta as torres.", "se o caminho estiver livre e seguro, considere rocar.");
+        }
+        const captures = ms.filter(m => m.capture);
+        if (captures.length) {
+          const best = captures
+            .slice()
+            .sort((a, b) => value[b.capture.toLowerCase()] - value[a.capture.toLowerCase()])[0];
+          return pack(`captura disponivel: ${moveUci(best)}.`, "captura boa ganha material; captura ruim perde a peca depois.", "confira se a peca que captura fica protegida.");
+        }
+        return pack("nao ha urgencia imediata.", "posicao calma melhora com pequenas vantagens.", "melhore sua pior peca ou crie uma ameaca simples.");
+      }
+
+      function applyMove(m) {
+        if (finalResult) return;
+        const before = JSON.parse(JSON.stringify(state));
+        history.push({
+          state: before,
+          last,
+          moveText: moveText.slice(),
+          analysisLog: analysisLog.slice(),
+          finalResult,
+          clock: cloneClock()
+        });
+        passClock(before.turn);
+        if (finalResult) {
+          history.pop();
+          return;
+        }
+        analyzeMove(before, m);
+        const notation = moveUci(m);
+        state = make(state, m);
+        last = [m.from, m.to];
+        moveText.push(notation);
+        selected = -1;
+        render();
+        maybeAi();
+      }
+
+      async function chooseAiMove() {
+        if (finalResult) return null;
+        const depth = depthEl.value;
+        const p = persona();
+        const book = bookMove(p);
+        if (book && depth !== "stockfish" && personaEl.value !== "stockfish") {
+          note(`${p.name}: livro de abertura.`);
+          return book;
+        }
+        if (depth === "stockfish" || personaEl.value === "stockfish") {
+          try {
+            note(`${p.name} pensando com Stockfish...`);
+            const move = await stockfishBestMove();
+            if (move) {
+              note(`${p.name} jogou.`);
+              return move;
+            }
+            note("Stockfish nao retornou lance legal; usando motor local.", true);
+          } catch {
+            note("Stockfish online indisponivel; usando motor local.", true);
+          }
+        }
+        const localDepth = Number(depth) || p.depth || 3;
+        const result = rootSearch(state, localDepth, p);
+        return result.move;
+      }
+
+      function maybeAi() {
+        if (finalResult) return;
+        if (modeEl.value !== "ai") return;
+        if (state.turn === sideEl.value) return;
+        window.setTimeout(async () => {
+          if (finalResult || modeEl.value !== "ai" || state.turn === sideEl.value) return;
+          const move = await chooseAiMove();
+          if (move) applyMove(move);
+        }, 160);
+      }
+
+      function render() {
+        const ms = legal();
+        const side = state.turn === "w" ? "Brancas" : "Pretas";
+        const status = !ms.length ? (inCheck(state, state.turn) ? "mate" : "empate") : inCheck(state, state.turn) ? "xeque" : "jogar";
+        if (!finalResult && status === "mate") {
+          setFinalResult({ type: "mate", winner: other(state.turn), loser: state.turn });
+        } else if (!finalResult && status === "empate") {
+          setFinalResult({ type: "empate", winner: null, loser: null });
+        }
+        if (finalResult) {
+          turnEl.textContent = resultText();
+        } else if (status === "xeque") {
+          turnEl.textContent = `Xeque: ${side} devem responder`;
+        } else if (status === "mate") {
+          turnEl.textContent = `${state.turn === "w" ? "Pretas" : "Brancas"} vencem por xeque-mate`;
+        } else if (status === "empate") {
+          turnEl.textContent = "Empate anunciado";
+        } else {
+          turnEl.textContent = `${side} - ${status}`;
+        }
+        modelLineEl.textContent = `Persona: ${persona().name} | ${persona().style}`;
+        fenEl.textContent = fen();
+        const coachLine = coachAdvice2(ms, status);
+        coachTextEl.textContent = coachLine;
+        updateClocks();
+        updateReport();
+        updateFocus(ms, status);
+        updateHud(ms, status, coachLine);
+        updateTablebaseHint();
+        boardEl.innerHTML = "";
+        const selectedMoves = selected >= 0 ? ms.filter(m => m.from === selected) : [];
+        for (let view = 0; view < 64; view++) {
+          const actual = flipped ? 63 - view : view;
+          const r = row(actual), f = file(actual);
+          const sq = document.createElement("button");
+          sq.className = `sq ${(r + f) % 2 ? "dark" : "light"}`;
+          if (actual === selected) sq.classList.add("selected");
+          if (last && last.includes(actual)) sq.classList.add("last");
+          const target = selectedMoves.find(m => m.to === actual);
+          if (target) sq.classList.add(target.capture ? "capture" : "hint");
+          sq.type = "button";
+          sq.addEventListener("click", () => clickSquare(actual));
+          const p = state.board[actual];
+          if (p !== ".") {
+            const piece = document.createElement("span");
+            piece.className = `piece ${colorOf(p) === "w" ? "white" : "black"}`;
+            piece.textContent = glyph[p];
+            sq.appendChild(piece);
+          }
+          if ((!flipped && f === 0) || (flipped && f === 7)) {
+            const rank = document.createElement("span");
+            rank.className = "coord rank";
+            rank.textContent = 8 - r;
+            sq.appendChild(rank);
+          }
+          if ((!flipped && r === 7) || (flipped && r === 0)) {
+            const fileLabel = document.createElement("span");
+            fileLabel.className = "coord file";
+            fileLabel.textContent = String.fromCharCode(97 + f);
+            sq.appendChild(fileLabel);
+          }
+          boardEl.appendChild(sq);
+        }
+        renderMoves();
+      }
+
+      function renderMoves() {
+        movesEl.innerHTML = "";
+        for (let i = 0; i < moveText.length; i += 2) {
+          const rowEl = document.createElement("div");
+          rowEl.className = "move-row";
+          rowEl.innerHTML = `<span>${Math.floor(i / 2) + 1}.</span><span>${moveText[i] || ""}</span><span>${moveText[i + 1] || ""}</span>`;
+          movesEl.appendChild(rowEl);
+        }
+        movesEl.scrollTop = movesEl.scrollHeight;
+      }
+
+      function clickSquare(index) {
+        if (finalResult) {
+          note("Partida encerrada. Clique em Nova partida para jogar de novo.");
+          return;
+        }
+        note("");
+        const p = state.board[index];
+        if (selected >= 0) {
+          const move = legal().find(m => m.from === selected && m.to === index);
+          if (move) {
+            applyMove(move);
+            return;
+          }
+        }
+        if (p !== "." && colorOf(p) === state.turn && canHumanMove()) selected = index;
+        else selected = -1;
+        render();
+      }
+
+      function canHumanMove() {
+        if (finalResult) return false;
+        if (modeEl.value !== "ai") return true;
+        return state.turn === sideEl.value;
+      }
+
+      function note(text, bad = false) {
+        noteEl.textContent = text;
+        noteEl.className = bad ? "note bad" : "note";
+      }
+
+      function resetGame() {
+        state = parseFen(START);
+        history.length = 0;
+        moveText.length = 0;
+        analysisLog.length = 0;
+        selected = -1;
+        last = null;
+        finalResult = null;
+        resetClock();
+        note("");
+        render();
+        maybeAi();
+      }
+
+      function loadTablebaseDemo() {
+        state = parseFen("6k1/8/8/8/8/8/8/6KQ w - - 0 1");
+        history.length = 0;
+        moveText.length = 0;
+        analysisLog.length = 0;
+        selected = -1;
+        last = null;
+        finalResult = null;
+        modeEl.value = "human";
+        resetClock();
+        note("Final exemplo carregado: K+Q vs K.");
+        render();
+      }
+
+      document.getElementById("newGame").addEventListener("click", resetGame);
+
+      document.getElementById("flip").addEventListener("click", () => {
+        flipped = !flipped;
+        render();
+      });
+
+      document.getElementById("aiMove").addEventListener("click", async () => {
+        if (finalResult) {
+          note("Partida encerrada. Clique em Nova partida para jogar de novo.");
+          return;
+        }
+        const move = await chooseAiMove();
+        if (move) applyMove(move);
+      });
+
+      document.getElementById("applyUci").addEventListener("click", () => {
+        if (finalResult) {
+          note("Partida encerrada. Clique em Nova partida para testar outro lance.");
+          return;
+        }
+        const move = legalByUci(uciEl.value);
+        if (!move) {
+          note("UCI invalido para a posicao atual.", true);
+          return;
+        }
+        uciEl.value = "";
+        applyMove(move);
+      });
+
+      document.getElementById("copyFen").addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(fen());
+          note("FEN copiado.");
+        } catch {
+          note("FEN: " + fen());
+        }
+      });
+
+      document.getElementById("undo").addEventListener("click", () => {
+        const prev = history.pop();
+        if (!prev) return;
+        state = prev.state;
+        last = prev.last;
+        moveText.length = 0;
+        moveText.push(...prev.moveText);
+        analysisLog.length = 0;
+        analysisLog.push(...(prev.analysisLog || []));
+        finalResult = prev.finalResult || null;
+        restoreClock(prev.clock || cloneClock());
+        selected = -1;
+        note("");
+        render();
+      });
+
+      modeEl.addEventListener("change", maybeAi);
+      personaEl.addEventListener("change", () => {
+        note(`Persona ativa: ${persona().name}.`);
+        render();
+        maybeAi();
+      });
+      sideEl.addEventListener("change", maybeAi);
+      timeControlEl.addEventListener("change", resetGame);
+      coachModeEl.addEventListener("change", render);
+      pieceThemeEl.addEventListener("change", () => {
+        document.body.dataset.pieceTheme = pieceThemeEl.value;
+        note(`Pecas: ${pieceThemeEl.options[pieceThemeEl.selectedIndex].text}.`);
+      });
+      tablebaseDemoBtnEl.addEventListener("click", loadTablebaseDemo);
+      resolverBtnEl.addEventListener("click", resolvePositionDv);
+      tablebaseBtnEl.addEventListener("click", probeTablebase);
+      document.getElementById("dockNew").addEventListener("click", resetGame);
+      document.getElementById("dockHint").addEventListener("click", () => {
+        note(hudCoachEl.textContent || "Mantenha o rei seguro e jogue simples.");
+      });
+      document.getElementById("dockAi").addEventListener("click", () => document.getElementById("aiMove").click());
+      document.getElementById("dockUndo").addEventListener("click", () => document.getElementById("undo").click());
+
+      clock.timer = window.setInterval(() => {
+        debitClock();
+        updateClocks();
+      }, 250);
+      render();
+    })();
+  </script>
+</body>
+</html>
